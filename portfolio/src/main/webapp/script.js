@@ -26,3 +26,18 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+/**
+ * Adds a random place to the page.
+ */
+function addRandomPlace() {
+  const places =
+      ['Lauterbrunnen, Switzerland', 'Kyoto, Japan', 'Banff, Canada', 'Annecy, France', 'Reine, Norway'];
+
+  // Pick a random place.
+  const place = places[Math.floor(Math.random() * places.length)];
+
+  // Add it to the page.
+  const placeContainer = document.getElementById('place-container');
+  placeContainer.innerText = place;
+}

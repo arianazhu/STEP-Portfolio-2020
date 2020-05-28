@@ -1,13 +1,180 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+body {
+    background-color: #262626;
 }
 
-#greeting-container {
-  margin-top: 20px;
+h1, h2, h3, p {
+    color: #fafafa;
+}
+
+.content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px; /* 650px */
 }
 
 #place-container {
   margin-top: 20px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #e7e7e7;
+    background-color: #f3f3f3;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: #666;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #e7e7e7;
+}
+
+.active {
+    background-color: #c1b9f0;
+}
+
+/* Projects */
+
+.project_container {
+  position: relative;
+  width: 100%;
+}
+
+/* Image box for each project */
+.project {
+    opacity: 1;
+    display: block;
+    width: 800px;
+    height: 300px;
+    transition: .5s ease;
+    backface-visibility: hidden;
+    object-fit: cover;
+}
+
+.middle {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.project_container:hover .project {
+    opacity: 0.3;
+}
+
+.project_container:hover .middle {
+    opacity: 1;
+}
+
+.text {
+    background-color: #262626;
+    color: white;
+    font-size: 16px;
+    padding: 16px 32px;
+}
+
+/* Gallery */
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    /* padding: 0 4px; */
+}
+
+/* Create 2 equal columns side by side */
+.column {
+    flex: 50%;
+    max-width: 50%
+}
+
+.column img {
+    /* margin-top: 8px; */
+    vertical-align: middle;
+    width: 100%
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Container for image overlay */
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;   /* half of content width (800px)*/
+}
+
+/* Make image responsive */
+.image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Overlay effect (on top of container, and over the image) */
+.overlay {
+    position: absolute;
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); /* Black see-through */
+    color: #f1f1f1;
+    width: 100%;
+    transition: .5s ease;
+    opacity:0;
+    color: white;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Present overlay on hover */
+.container:hover .overlay {
+    opacity: 1;
+}
+
+/* Contact */
+
+/* Style all font awesome icons */
+.fa {
+    padding: 20px;
+    font-size: 70px;
+    width: 398px;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* Add a hover effect to social media icon */
+.fa:hover {
+    opacity: 0.7;
+}
+
+/* Set a specific color for each brand */
+
+/* Linkedin */
+.fa-linkedin {
+    background: #0e76a8;
+    color: white;
+}
+
+/* Linkedin */
+.fa-github {
+    background: #6e5494;
+    color: white;
 }

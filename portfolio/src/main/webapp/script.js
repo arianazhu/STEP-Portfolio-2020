@@ -13,36 +13,47 @@
 // limitations under the License.
 
 /**
- * Adds a random place to the page.
+ * Adds a random quote to the page. Source: https://www.inc.com/bill-murphy-jr/366-top-inspirational-quotes-motivational-quotes-for-every-single-day-in-2020.html
  */
-function addRandomPlace() {
-  const places =
-      ['Lauterbrunnen, Switzerland', 'Kyoto, Japan', 'Banff, Canada', 'Annecy, France', 'Reine, Norway'];
+function addRandomQuote() {
+  const quotes =
+      ['"Normality is a paved road: It\'s comfortable to walk, but no flowers grow on it."\n- Vincent Van Gogh', '"Positive thinking will let you do everything better than negative thinking will."\n- Zig Ziglar', 
+      '"I look for the day... when the only criterion of excellence or position shall be the ability and character of the individual; and this time will come."\n- Susan B. Anthony',
+      '"Use your fear... it can take you to the place where you store your courage."\n- Amelia Earhart', '"If it wasn\'t hard, everyone would do it. It\'s the hard that makes it great."\n- Tom Hanks',
+      '"One doesn\'t discover new lands without consenting to lose sight, for a very long time, of the shore."\n- Andre Gide',
+      '"The fastest way to change yourself is to hang out with people who are already the way you want to be."\n- Reid Hoffman', '"To see we must forget the name of the thing we are looking at."\n- Claude Monet',
+      '"Practice what you know, and it will help to make clear what now you do not know."\n- Rembrandt',
+      '"There can be no greater gift than that of giving one\'s time and energy to help others without expecting anything in return."\n- Nelson Mandela',
+      '"When the whole world is silent, even one voice becomes powerful."\n- Malala Yousafzai', '"Don\'t worry about failure; you only have to be right once."- Drew Houston',
+      '"It\'s not in the dreaming, it\'s in the doing."\n- Mark Cuban'];
 
-  // Pick a random place.
-  const place = places[Math.floor(Math.random() * places.length)];
+  // Pick a random quote.
+  const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
   // Add it to the page.
-  const placeContainer = document.getElementById('place-container');
-  placeContainer.innerText = place;
+  const quoteContainer = document.getElementById('quote-container');
+  quoteContainer.innerText = quote;
 }
 
-// Slideshow functions
+// Slideshow functions inspired by https://www.w3schools.com/howto/howto_js_slideshow.asp
 
-// var slideIndex = 1;
-// showSlides(slideIndex);
-
-// Next/previous controls
+/**
+ * Next/previous controls
+ */
 function plusSlides(n) {
     showSlides(slideIndex += n);
 }
 
-// Thumbnail image controls
+/**
+ * Thumbnail image controls
+ */
 function currentSlide(n) {
     showSlides(slideIndex = n);
 }
 
-// Slideshow helper function
+/**
+ * Slideshow helper
+ */
 function showSlides(n) {
     var i;
     var slides = document.getElementsByClassName("mySlides");

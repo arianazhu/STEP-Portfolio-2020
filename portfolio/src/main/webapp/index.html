@@ -5,10 +5,23 @@
     <title>Ariana Zhu</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
+
+    <!-- JS delay loading content inspired by https://forums.asp.net/t/2061422.aspx? -->
+    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Hide the div
+            $("#img_delay").hide();
+            $("#text_delay").hide();
+            // Show the div after 2s for image, 3.5s for text
+            $("#img_delay").delay(2000).fadeIn(100);
+            $("#text_delay").delay(3500).fadeIn(100); 
+        });    
+    </script>
   </head>
   <body>
     <div class="content">
-      <h1>Ariana Zhu</h1>
+      <h1> Ariana Zhu</h1>
       <ul class="menu">
           <li class="menu_item"><a href="index.html" class="active">Home</a></li>
           <li class="menu_item"><a href="projects.html">Projects</a></li>
@@ -18,11 +31,27 @@
     </div>
 
     <div class="content">
-      <p>Ariana Zhu is an incoming junior studying Computer Science at Purdue University.</p>
-      <img src="/images/clemence.jpg" alt="European bridge" width="500">
-      <p>Click here to get a random place on my travel bucket list:</p>
-      <button onclick="addRandomPlace()">See a favorite place!</button>
-      <div id="place-container"></div>
+        <div class="typewriter">
+            <br>
+            <center><h1>Hi! I'm Ariana.</h1></center>
+        </div>
+
+        <br>
+
+        <div>
+            <div id="img_delay" class="fade-in">
+                <center><img src="/images/ariana.jpg" alt="Ariana (me) in Palm Springs, CA" style="width:50%"></center>
+            </div>
+            <br>
+            <div id="text_delay">
+                <h2>I'm an incoming third-year student studying Computer Science at Purdue University.</h2>
+                <h2>Take a look around my portfolio!</h2>
+            </div>
+        </div>
+
+      <!-- <button onclick="addRandomPlace()">See a favorite place!</button>
+      <div id="place-container"></div> -->
     </div>
+
   </body>
 </html>

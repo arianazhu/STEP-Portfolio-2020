@@ -1,5 +1,9 @@
+/* General */
+
 body {
     background-color: #262626;
+    margin-top: 200px;
+    margin-bottom: 200px;
 }
 
 h1, h2, h3, p, ul {
@@ -10,18 +14,20 @@ h1, h2, h3, p, ul {
   margin-left: auto;
   margin-right: auto;
   width: 800px; /* 650px */
+  height: 100px;
 }
 
 #place-container {
   margin-top: 20px;
 }
 
+/* Header */
+
 ul.menu {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    /* border: 1px solid #e7e7e7; */
     background-color: #262626;
 }
 
@@ -34,6 +40,7 @@ li a {
     /* color: #666; */
     color: white;
     font-weight: bold;
+    font-size: 20px;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -49,6 +56,76 @@ li a:hover {
     background-color: #c1b9f0 !important;
     border-radius: 12px;
 }
+
+/* Home */
+
+/* Typewriter effect inspired by https://css-tricks.com/snippets/css/typewriter-effect/ */
+.typewriter h1 {
+    color: #fafafa;
+    font-family: monospace;
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+    letter-spacing: .15em; /* Adjust as needed */
+    animation: typing 4.5s steps(30, end);
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* Fade in image effect inspired by https://blog.hubspot.com/website/css-fade-in */
+.fade-in {
+    animation: fadeIn ease 20s;
+    -webkit-animation: fadeIn ease 2s;
+    -moz-animation: fadeIn ease 2s;
+    -o-animation: fadeIn ease 2s;
+    -ms-animation: fadeIn ease 2s;
+}
+
+/* Fade in text effect */
+div h3.fade_text {
+    /* display: inline-block; */
+    /* font-family: 'Montserrat';
+    font-size: 30px;
+    color: black; */
+    text-transform: none;
+    margin: 0 20px;
+    opacity: 0.0;
+    animation: fadeIn ease 4s;
+    -webkit-animation: fadeIn ease 4s;
+}
+
+@keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
+/* Cross browser support */
+@-moz-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-webkit-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-o-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-ms-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
+
+img {
+    max-width: 800px;
+}
+
 
 /* Projects */
 
@@ -242,7 +319,8 @@ a.image_link:hover {
 
 * {
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    font-family: monospace;
 }
 
 /* Container for image overlay */
@@ -286,7 +364,7 @@ a.image_link:hover {
 .fa {
     padding: 20px;
     font-size: 70px;
-    width: 398px;
+    width: 390px;
     text-align: center;
     text-decoration: none;
 }

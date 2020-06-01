@@ -176,7 +176,7 @@ img {
 a.image_link:link {
     color: white;
     background-color: transparent;
-    text-decoration: white;
+    text-decoration: bold;
 }
 
 a.image_link:visited {

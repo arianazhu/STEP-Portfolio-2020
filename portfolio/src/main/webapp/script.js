@@ -35,6 +35,15 @@ function addRandomQuote() {
   quoteContainer.innerText = quote;
 }
 
+/**
+ * Fetches data and handles response by converting to text
+ */
+function getData() {
+  fetch('/data').then(response => response.text()).then((quote) => {
+    document.getElementById('quote-container').innerText = quote;
+  });
+}
+
 // Slideshow functions inspired by https://www.w3schools.com/howto/howto_js_slideshow.asp
 
 /**

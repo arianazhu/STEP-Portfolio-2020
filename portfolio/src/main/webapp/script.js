@@ -36,13 +36,18 @@ function addRandomQuote() {
 }
 
 /**
- * Fetches data and handles response by converting to text
+ * Fetches data and handles response by converting to text for the homepage
  */
-function getData() {
+function getDataHomepage() {
   fetch('/data').then(response => response.text()).then((quote) => {
     document.getElementById('quote-container').innerText = quote;
   });
+
+  fetch('/data').then(response => response.json()).then((messages) => {
+      console.log(messages);
+  });
 }
+
 
 // Slideshow functions inspired by https://www.w3schools.com/howto/howto_js_slideshow.asp
 

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Ariana Zhu | Projects - NPS Kiosk</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  </head>
+  <body onload="currentSlide(1)">
+    <div class="content">
+      <h1>Ariana Zhu</h1>
+      <ul class="menu">
+          <li class="menu_item"><a href="index.html">Home</a></li>
+          <li class="menu_item"><a href="projects.html" class="active">Projects</a></li>
+          <li class="menu_item"><a href="gallery.html">Gallery</a></li>
+          <li class="menu_item"><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="content">
+        <!-- Back link -->
+      <h3><a href="projects.html" class="image_link"><u><i>&lt Projects</i></u></a></h3>
+
+      <h1>National Park Services Kiosk</h1>
+      <p style="font-size:160%;">This NPS web kiosk was my submission to Capital One's MindSumo Challenge. My project was selected as a finalist, 
+          and I received an invitation to Capital One's 2019 Software Engineering Summit in Richmond, VA. This project uses 
+          Bootstrap, Node.js, and the National Park Services API.</p>
+      <br>
+
+      <!-- Demo slideshow -->
+      <div class="slideshow_container">
+          <!-- Image card -->
+          <div class="mySlides fade">
+              <img src="/images/nps_home.png" alt="Homepage slideshow" style="width:100%">
+          </div>
+
+          <div class="mySlides fade">
+              <img src="/images/nps_search.png" alt="Search parks by designation page" style="width:100%">
+          </div>
+
+          <div class="mySlides fade">
+              <img src="/images/nps_results.png" alt="Search results by state" style="width:100%">
+          </div>
+
+          <div class="mySlides fade">
+              <img src="/images/nps_park.png" alt="National park info page" style="width:100%">
+          </div>
+
+          <div class="mySlides fade">
+              <img src="/images/nps_articles.png" alt="National park relevant articles" style="width:100%">
+          </div>
+
+          <!-- Next and prev buttons -->
+          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+          <a class="next" onclick="plusSlides(1)">&#10095;</a>
+      </div>
+      <br>
+
+      <!-- Slideshow dots -->
+      <div style="text-align:center">
+          <span class="dot" onclick="currentSlide(1)"></span>
+          <span class="dot" onclick="currentSlide(2)"></span>
+          <span class="dot" onclick="currentSlide(3)"></span>
+          <span class="dot" onclick="currentSlide(4)"></span>
+          <span class="dot" onclick="currentSlide(5)"></span>
+      </div>
+    <br>
+      <center><button type="button" class="block" style="color:white" onclick="window.location.href='https://github.com/arianazhu/Capital-One-NPS';"><b>Github Link</b></button></center>
+    <br>
+      
+      <h3>Problem Motivation</h3>
+      <p>For the last 100 years, the <a href="https://www.nps.gov/index.htm" class="image_link">National Park Service</a> has contributed greatly to the preservation and management of America's national parks, 
+          as well as many of its national monuments. More than 330 million people visit the 61 national parks they oversee each year, 
+          with 40 million overnight campers. This web app keeps those visitors informed, educated, and safe as they enjoy the parks. It allows 
+          users to have the best National Park experience possible with an intuitive, easy to navigate interface.
+      </p>
+    
+      <h3>App Features</h3>
+      <ul>
+          <li>Provides tools to assist users in finding specific information, such as state and designation filtering, name and keyword search</li>
+          <li>Lists details about specific visitor centers, as well as nearby campgrounds</li>
+          <li>Displays alerts, articles, events, and news releases about a selected destination.</li>
+          <li>Provides educational information about a selected destination, utilizing available lesson plans as well as relevant people and places associated with the location.</li>
+      </ul>
+
+    </div>
+  </body>
+</html>

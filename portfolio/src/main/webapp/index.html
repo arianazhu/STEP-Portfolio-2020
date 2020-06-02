@@ -2,17 +2,57 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Ariana Zhu</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
+
+    <!-- JS delay loading content inspired by https://forums.asp.net/t/2061422.aspx? -->
+    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Hide the div
+            $("#img_delay").hide();
+            $("#text_delay").hide();
+            // Show the div after 2s for image, 3.5s for text
+            $("#img_delay").delay(2000).fadeIn(100);
+            $("#text_delay").delay(3500).fadeIn(100); 
+        });    
+    </script>
   </head>
   <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+    <div class="content">
+      <h1>Ariana Zhu</h1>
+      <ul class="menu">
+          <li class="menu_item"><a href="index.html" class="active">Home</a></li>
+          <li class="menu_item"><a href="projects.html">Projects</a></li>
+          <li class="menu_item"><a href="gallery.html">Gallery</a></li>
+          <li class="menu_item"><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="content">
+        <div class="typewriter">
+            <br>
+            <center><h1>Hi! I'm Ariana.</h1></center>
+        </div>
+
+        <br>
+
+        <div>
+            <div id="img_delay" class="fade-in">
+                <center><img src="/images/ariana.jpg" alt="Ariana (me) in Palm Springs, CA" style="width:50%"></center>
+            </div>
+            <br>
+            <div id="text_delay">
+                <h2>I'm an incoming third-year student studying Computer Science at Purdue University.</h2>
+                <h2>Take a look around my portfolio!</h2>
+                <br>
+                <center><button type="button" class="block" style="color:white" width="400" onclick="getDataHomepage()">Fetch data from server!</button></center>
+                <div id="quote-container"></div>
+            </div>
+        </div>
+
+      
     </div>
   </body>
 </html>

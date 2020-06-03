@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.*;
@@ -26,21 +27,60 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-    private ArrayList<String> messages = new ArrayList<>(Arrays.asList("Message 1", "Message 2", "Message 3"));
-
-    /**
-     * Convert ArrayList as JSON using GSON library.
-    */
-    private String convertArrayListToJson(ArrayList<String> messages) {
-        Gson gson = new Gson();
-        String json = gson.toJson(messages);
-        return json;
-    }
+    private ArrayList<Comment> comments = new ArrayList<>();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;");
-        // response.getWriter().println("<h1>Hello Ariana!</h1>");
-        response.getWriter().println(convertArrayListToJson(messages));
+        response.setContentType("application/json");
+        String json = new Gson().toJson(comments);
+        response.getWriter().println(json);
+        System.out.println("doGet:");
+        System.out.println(json);
     }
+
+    @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Get input from the form
+        String name = getNameField(request);
+        String location = getLocationField(request);
+        String content = getContentField(request);
+        // TODO check which field this pops up
+        if (name == null || location == null || content == null) {
+            response.setContentType("text/html");
+            response.getWriter().println("Please fill in all fields.");
+            return;
+        }
+
+        comments.add(new Comment(name, location, content));
+
+        // Redirect back to HTML page
+        response.sendRedirect("/contact.html");
+  }
+
+  /** Returns the name field, or null if empty field. */
+  private String getNameField(HttpServletRequest request) {
+      // Get input from form
+      String fieldString = request.getParameter("comment-name");
+
+      if (fieldString.length() == 0) return null;
+      return fieldString;
+  }
+
+  /** Returns the location field, or null if empty field. */
+  private String getLocationField(HttpServletRequest request) {
+      // Get input from form
+      String fieldString = request.getParameter("comment-location");
+
+      if (fieldString.length() == 0) return null;
+      return fieldString;
+  }
+
+  /** Returns the content field, or null if empty field. */
+  private String getContentField(HttpServletRequest request) {
+      // Get input from form
+      String fieldString = request.getParameter("comment-content");
+
+      if (fieldString.length() == 0) return null;
+      return fieldString;
+  }
 }

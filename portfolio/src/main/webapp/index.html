@@ -11,11 +11,11 @@
     <script>
         $(document).ready(function () {
             // Hide the div
-            $("#img_delay").hide();
+            //$("#img_delay").hide();
             $("#text_delay").hide();
             // Show the div after 2s for image, 3.5s for text
-            $("#img_delay").delay(2000).fadeIn(100);
-            $("#text_delay").delay(3500).fadeIn(100); 
+            //$("#img_delay").delay(2000).fadeIn(100);
+            $("#text_delay").delay(4500).fadeIn(100); 
         });    
     </script>
   </head>
@@ -33,21 +33,19 @@
     <div class="content">
         <div class="typewriter">
             <br>
-            <center><h1>Hi! I'm Ariana.</h1></center>
+            <center><h2 class="typed">Ariana Zhu. CS @ Purdue University '22.</h2></center>
         </div>
 
         <br>
 
         <div>
-            <div id="img_delay" class="fade-in">
+            <!-- <div id="img_delay" class="fade-in">
                 <center><img src="/images/ariana.jpg" alt="Ariana (me) in Palm Springs, CA" style="width:50%"></center>
-            </div>
+            </div> -->
             <br>
             <div id="text_delay">
-                <h2>I'm an incoming third-year student studying Computer Science at Purdue University.</h2>
-                <h2>Take a look around my portfolio!</h2>
                 <br>
-                <center><button type="button" class="block" style="color:white" width="400" onclick="getDataHomepage()">Fetch data from server!</button></center>
+                <center><button type="button" class="block" style="color:white" width="400" onclick="getDataHomepage()">Fetch data from server</button></center>
                 <div id="quote-container"></div>
             </div>
         </div>

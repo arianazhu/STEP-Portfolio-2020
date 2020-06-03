@@ -33,6 +33,8 @@ public final class SubtractionServlet extends HttpServlet {
     response.setContentType("application/json");
     String json = new Gson().toJson(game);
     response.getWriter().println(json);
+    System.out.println("doGet:");
+    System.out.println(json);
   }
 
   @Override
@@ -53,7 +55,7 @@ public final class SubtractionServlet extends HttpServlet {
     game.takePlayerTurn(playerChoice);
 
     // Redirect back to the HTML page.
-    response.sendRedirect("/index.html");
+    response.sendRedirect("/index-sub.html");
   }
 
   /** Returns the choice entered by the player, or -1 if the choice was invalid. */

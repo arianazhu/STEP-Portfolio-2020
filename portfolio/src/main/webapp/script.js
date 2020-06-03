@@ -39,13 +39,32 @@ function addRandomQuote() {
  * Fetches data and handles response by converting to text for the homepage
  */
 function getDataHomepage() {
-  fetch('/data').then(response => response.text()).then((quote) => {
-    document.getElementById('quote-container').innerText = quote;
+  fetch('/data').then(response => response.text()).then((messages) => {
+    document.getElementById('quote-container').innerText = messages;
+    console.log(messages);
   });
+}
 
-  fetch('/data').then(response => response.json()).then((messages) => {
-      console.log(messages);
+/**
+ * Fetches data and handles response for contact page comments
+ */
+function getDataComments() {
+  fetch('/data').then(response => response.json()).then((comments) => {
+      // Build list of comments
+      const commentsEl = document.getElementById('comments-list');
+      comments.forEach((comment) => {
+          commentsEl.appendChild(createListElement(comment));
+      });
+    // document.getElementById('comments-container').innerText = comments;
+    // console.log(comments);
   });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(comment) {
+    const liElement = document.createElement('li');
+    liElement.innerHTML = comment.name + ", " + comment.location + ", " + comment.content;
+    return liElement;
 }
 
 

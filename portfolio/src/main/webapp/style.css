@@ -6,7 +6,7 @@ body {
     margin-bottom: 200px;
 }
 
-h1, h2, h3, p, ul {
+h1, h2, h3, p, ul, label {
     color: #fafafa;
 }
 
@@ -56,21 +56,21 @@ li a:hover {
 }
 
 .active {
-    background-color: #c1b9f0 !important;
+    background-color: #827da1 !important;
     border-radius: 12px;
 }
 
 /* Home */
 
 /* Typewriter effect inspired by https://css-tricks.com/snippets/css/typewriter-effect/ */
-.typewriter h1 {
+.typewriter h2.typed {
     color: #fafafa;
-    font-family: monospace;
+    font-family: Arial, Helvetica, sans-serif;
     overflow: hidden; /* Ensures the content is not revealed until the animation */
     white-space: nowrap; /* Keeps the content on a single line */
     margin: 0 auto; /* Gives that scrolling effect as the typing happens */
     letter-spacing: .15em; /* Adjust as needed */
-    animation: typing 4.5s steps(30, end);
+    animation: typing 4s steps(30, end);
 }
 
 /* The typing effect */
@@ -195,7 +195,7 @@ a.image_link:hover {
     display: block;
     width: 25%;
     border: none;
-    background-color: #c1b9f0;
+    background-color: #827da1;
     padding: 14px 28px;
     font-size: 16px;
     cursor: pointer;
@@ -319,7 +319,7 @@ a.image_link:hover {
 * {
     box-sizing: border-box;
     /* font-family: Arial, Helvetica, sans-serif; */
-    font-family: monospace;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Container for image overlay */
@@ -383,5 +383,20 @@ a.image_link:hover {
 /* Linkedin */
 .fa-github {
     background: #6e5494;
+    color: white;
+}
+
+#comments-container {
+  margin-top: 20px;
+  color: white;
+  font-size: 15px;
+  font-style: italic;
+}
+
+ul#comments-list {
+    color: white;
+}
+
+li {
     color: white;
 }

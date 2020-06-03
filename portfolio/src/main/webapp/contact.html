@@ -10,7 +10,7 @@
 
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="getDataComments()">
     <div class="content">
       <h1>Ariana Zhu</h1>
       <ul class="menu">
@@ -26,6 +26,25 @@
       <!-- Add font awesome icons -->
       <a href="https://www.linkedin.com/in/arianazhu/" class="fa fa-linkedin"></a>
       <a href="https://github.com/arianazhu" class="fa fa-github"></a>
+    </div>
+
+    <br>
+    <div class="content comments">
+        <h2>Sign the Guestbook!</h2>
+        <form action="/data" method="POST">
+            <label for=:"comment-name">Name:</label><br>
+            <input type="text" name="comment-name"><br>
+            <label for=:"comment-location">Location:</label><br>
+            <input type="text" name="comment-location"><br>
+            <label for=:"comment-content">Leave a comment:</label><br>
+            <input type="text" name="comment-content"><br>
+
+            <br>
+            <input type="submit">
+        </form>
+        <div id="comments-container">
+            <ul id="comments-list"></ul>
+        </div>
     </div>
   </body>
 </html>

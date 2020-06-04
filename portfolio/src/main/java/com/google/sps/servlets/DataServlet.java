@@ -19,6 +19,9 @@ import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
 import java.util.*;
 import javax.servlet.annotation.WebServlet;
@@ -30,10 +33,25 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-    private ArrayList<Comment> comments = new ArrayList<>();
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+
+        List<Comment> comments = new ArrayList<>();
+        for (Entity entity : results.asIterable()) {
+            long id = entity.getKey().getId();
+            String name = (String) entity.getProperty("user_name");
+            String location = (String) entity.getProperty("user_location");
+            String content = (String) entity.getProperty("content");
+            long timestamp = (long) entity.getProperty("timestamp");
+
+            Comment comment = new Comment(name, location, content, timestamp);
+            comments.add(comment);
+        }
+
         response.setContentType("application/json");
         String json = new Gson().toJson(comments);
         response.getWriter().println(json);
@@ -42,9 +60,9 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get input from the form
-        String name = getNameField(request);
-        String location = getLocationField(request);
-        String content = getContentField(request);
+        String name = getField(request, "comment-name");
+        String location = getField(request, "comment-location");
+        String content = getField(request, "comment-content");
         long timestamp = System.currentTimeMillis();
 
         // TODO check which field this pops up
@@ -56,42 +74,22 @@ public class DataServlet extends HttpServlet {
 
         // Store comment in Datastore
         Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("name", name);
+        commentEntity.setProperty("user_name", name);
         commentEntity.setProperty("timestamp", timestamp);
-        commentEntity.setProperty("location", location);
+        commentEntity.setProperty("user_location", location);
         commentEntity.setProperty("content", content);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
 
-        comments.add(new Comment(name, location, content, timestamp));
-
         // Redirect back to HTML page
         response.sendRedirect("/contact.html");
     }
 
-    /** Returns the name field, or null if empty field. */
-    private String getNameField(HttpServletRequest request) {
+    /** Returns the field value, or null if empty field. */
+    private String getField(HttpServletRequest request, String param) {
         // Get input from form
-        String fieldString = request.getParameter("comment-name");
-
-        if (fieldString.length() == 0) return null;
-        return fieldString;
-    }
-
-    /** Returns the location field, or null if empty field. */
-    private String getLocationField(HttpServletRequest request) {
-        // Get input from form
-        String fieldString = request.getParameter("comment-location");
-
-        if (fieldString.length() == 0) return null;
-        return fieldString;
-    }
-
-    /** Returns the content field, or null if empty field. */
-    private String getContentField(HttpServletRequest request) {
-        // Get input from form
-        String fieldString = request.getParameter("comment-content");
+        String fieldString = request.getParameter(param);
 
         if (fieldString.length() == 0) return null;
         return fieldString;

@@ -5,31 +5,34 @@ import java.util.List;
 
 public class Comment {
 
-    // Name of user leaving the comment
-    private String name;
+    private String user_name;
 
-    // Location of user
-    private String location;
+    // plan to implement a country dropdown
+    private String user_location;
 
-    // Text content of comment
     private String content;
 
-    // Time comment was posted
     private long timestamp;
 
+    /* Comment:
+        user_name: The full name of the user posting the comment.
+        user_location: Location (Country) of the comment poster.
+        content: the comment.
+        timestamp: System time user posted the comment
+    */
     public Comment(String name, String location, String content, long timestamp) {
-        this.name = name;
-        this.location = location;
+        this.user_name = name;
+        this.user_location = location;
         this.content = content;
         this.timestamp = timestamp;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return user_name;
     }
 
-    public String getLocation() {
-        return location;
+    public String getUserLocation() {
+        return user_location;
     }
 
     public String getContent() {

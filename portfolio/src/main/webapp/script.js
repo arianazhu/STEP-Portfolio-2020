@@ -39,7 +39,7 @@ function addRandomQuote() {
  * Fetches data and handles response by converting to text for the homepage
  */
 function getDataHomepage() {
-  fetch('/data').then(response => response.text()).then((messages) => {
+  fetch('/data').then(response => response.text()).then(messages => {
     document.getElementById('quote-container').innerText = messages;
     console.log(messages);
   });
@@ -49,21 +49,19 @@ function getDataHomepage() {
  * Fetches data and handles response for contact page comments
  */
 function getDataComments() {
-  fetch('/data').then(response => response.json()).then((comments) => {
+  fetch('/data').then(response => response.json()).then(comments => {
       // Build list of comments
-      const commentsEl = document.getElementById('comments-list');
-      comments.forEach((comment) => {
-          commentsEl.appendChild(createListElement(comment));
+      const commentsElement = document.getElementById('comments-list');
+      comments.forEach(comment => {
+          commentsElement.appendChild(createListElement(comment));
       });
-    // document.getElementById('comments-container').innerText = comments;
-    // console.log(comments);
   });
 }
 
 /** Creates an <li> element containing text. */
 function createListElement(comment) {
     const liElement = document.createElement('li');
-    liElement.innerHTML = comment.name + ", " + comment.location + ", " + comment.content;
+    liElement.innerHTML = comment.user_name + ", " + comment.user_location + ", " + comment.content;
     return liElement;
 }
 

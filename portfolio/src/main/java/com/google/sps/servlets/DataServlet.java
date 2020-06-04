@@ -16,6 +16,9 @@ package com.google.sps.servlets;
 
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import java.util.*;
 import javax.servlet.annotation.WebServlet;
@@ -34,16 +37,16 @@ public class DataServlet extends HttpServlet {
         response.setContentType("application/json");
         String json = new Gson().toJson(comments);
         response.getWriter().println(json);
-        System.out.println("doGet:");
-        System.out.println(json);
     }
 
     @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get input from the form
         String name = getNameField(request);
         String location = getLocationField(request);
         String content = getContentField(request);
+        long timestamp = System.currentTimeMillis();
+
         // TODO check which field this pops up
         if (name == null || location == null || content == null) {
             response.setContentType("text/html");
@@ -51,36 +54,46 @@ public class DataServlet extends HttpServlet {
             return;
         }
 
-        comments.add(new Comment(name, location, content));
+        // Store comment in Datastore
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("name", name);
+        commentEntity.setProperty("timestamp", timestamp);
+        commentEntity.setProperty("location", location);
+        commentEntity.setProperty("content", content);
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(commentEntity);
+
+        comments.add(new Comment(name, location, content, timestamp));
 
         // Redirect back to HTML page
         response.sendRedirect("/contact.html");
-  }
+    }
 
-  /** Returns the name field, or null if empty field. */
-  private String getNameField(HttpServletRequest request) {
-      // Get input from form
-      String fieldString = request.getParameter("comment-name");
+    /** Returns the name field, or null if empty field. */
+    private String getNameField(HttpServletRequest request) {
+        // Get input from form
+        String fieldString = request.getParameter("comment-name");
 
-      if (fieldString.length() == 0) return null;
-      return fieldString;
-  }
+        if (fieldString.length() == 0) return null;
+        return fieldString;
+    }
 
-  /** Returns the location field, or null if empty field. */
-  private String getLocationField(HttpServletRequest request) {
-      // Get input from form
-      String fieldString = request.getParameter("comment-location");
+    /** Returns the location field, or null if empty field. */
+    private String getLocationField(HttpServletRequest request) {
+        // Get input from form
+        String fieldString = request.getParameter("comment-location");
 
-      if (fieldString.length() == 0) return null;
-      return fieldString;
-  }
+        if (fieldString.length() == 0) return null;
+        return fieldString;
+    }
 
-  /** Returns the content field, or null if empty field. */
-  private String getContentField(HttpServletRequest request) {
-      // Get input from form
-      String fieldString = request.getParameter("comment-content");
+    /** Returns the content field, or null if empty field. */
+    private String getContentField(HttpServletRequest request) {
+        // Get input from form
+        String fieldString = request.getParameter("comment-content");
 
-      if (fieldString.length() == 0) return null;
-      return fieldString;
-  }
+        if (fieldString.length() == 0) return null;
+        return fieldString;
+    }
 }

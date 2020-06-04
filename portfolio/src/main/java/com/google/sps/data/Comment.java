@@ -14,10 +14,14 @@ public class Comment {
     // Text content of comment
     private String content;
 
-    public Comment(String name, String location, String content) {
+    // Time comment was posted
+    private long timestamp;
+
+    public Comment(String name, String location, String content, long timestamp) {
         this.name = name;
         this.location = location;
         this.content = content;
+        this.timestamp = timestamp;
     }
 
     public String getName() {
@@ -30,6 +34,10 @@ public class Comment {
 
     public String getContent() {
         return content;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
 }

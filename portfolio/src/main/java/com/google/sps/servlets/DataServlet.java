@@ -35,19 +35,7 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String limit_string = request.getParameter("comment-limit");
-        int comment_limit = 0;
-        try {
-            comment_limit = Integer.parseInt(limit_string);
-        } catch (NumberFormatException n) {
-            if (limit_string.equals("all")) {
-                comment_limit = -1;
-            }
-            else {
-                // Printing error messages?
-                System.out.println("Unexpected value '" + comment_limit + "' for comment limit.");
-            }
-        }
+        int comment_limit = getCommentLimit(request);
         List<Comment> comments = getComments(comment_limit);
 
         response.setContentType("application/json");
@@ -84,10 +72,30 @@ public class DataServlet extends HttpServlet {
         response.sendRedirect("/contact.html");
     }
 
+    /** Returns comment limit value from the request, or -1 if user selected 'all' */
+    private int getCommentLimit(HttpServletRequest request) {
+        String limit_string = request.getParameter("comment-limit");
+        int comment_limit = 0;
+
+        try {
+            comment_limit = Integer.parseInt(limit_string);
+        } catch (NumberFormatException n) {
+            if (limit_string.equals("all")) {
+                comment_limit = -1;
+            }
+            else {
+                // Printing error messages?
+                System.out.println("Unexpected value '" + comment_limit + "' for comment limit.");
+            }
+        }
+
+        return comment_limit;
+    }
+
     /** Returns the field value, or null if empty field. */
-    private String getField(HttpServletRequest request, String param) {
+    private String getField(HttpServletRequest request, String field) {
         // Get input from form
-        String fieldString = request.getParameter(param);
+        String fieldString = request.getParameter(field);
 
         if (fieldString.length() == 0) return null;
         return fieldString;

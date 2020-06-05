@@ -36,26 +36,42 @@ function addRandomQuote() {
 }
 
 /**
- * Fetches data and handles response by converting to text for the homepage
+ * Fetches empty comments list and deletes comments
  */
-function getDataHomepage() {
-  fetch('/data').then(response => response.text()).then(messages => {
-    document.getElementById('quote-container').innerText = messages;
-    console.log(messages);
-  });
+function deleteComments() {
+    fetch('/delete-comments', {method: 'POST', body: null}).then(response => getComments());
+
 }
 
 /**
  * Fetches data and handles response for contact page comments
  */
-function getDataComments() {
-  fetch('/data').then(response => response.json()).then(comments => {
-      // Build list of comments
+function getComments() {
+    // is the fetch string hardcoded?
+  fetch('/comments?comment-limit=' + getValue("comment-limit")).then(response => response.json()).then(comments => {
       const commentsElement = document.getElementById('comments-list');
-      comments.forEach(comment => {
-          commentsElement.appendChild(createListElement(comment));
-      });
+      updateComments(comments, commentsElement);
   });
+}
+
+/**
+ * Get attribute name value
+ */
+function getValue(name) {
+    return document.getElementById(name).value;
+}
+
+/**
+ * Replace old comments with new comments
+ */
+function updateComments(comments, element) {
+    // Clear out old comments
+    element.innerHTML = '';
+
+    // Build list of comments
+    comments.forEach(comment => {
+        element.appendChild(createListElement(comment));
+    });
 }
 
 /** Creates an <li> element containing text. */

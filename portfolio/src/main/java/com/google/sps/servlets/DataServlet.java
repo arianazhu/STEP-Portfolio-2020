@@ -29,28 +29,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
+/** Servlet that returns comment data */
+@WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        PreparedQuery results = datastore.prepare(query);
-
-        List<Comment> comments = new ArrayList<>();
-        for (Entity entity : results.asIterable()) {
-            long id = entity.getKey().getId();
-            String name = (String) entity.getProperty("user_name");
-            String location = (String) entity.getProperty("user_location");
-            String content = (String) entity.getProperty("content");
-            long timestamp = (long) entity.getProperty("timestamp");
-
-            Comment comment = new Comment(name, location, content, timestamp);
-            comments.add(comment);
-        }
+        int comment_limit = getCommentLimit(request);
+        List<Comment> comments = getComments(comment_limit);
 
         response.setContentType("application/json");
         String json = new Gson().toJson(comments);
@@ -86,12 +72,54 @@ public class DataServlet extends HttpServlet {
         response.sendRedirect("/contact.html");
     }
 
+    /** Returns comment limit value from the request, or -1 if user selected 'all' */
+    private int getCommentLimit(HttpServletRequest request) {
+        String limit_string = request.getParameter("comment-limit");
+        int comment_limit = 0;
+
+        try {
+            comment_limit = Integer.parseInt(limit_string);
+        } catch (NumberFormatException n) {
+            System.err.println("Unexpected value '" + comment_limit + "' for comment limit.");
+        }
+
+        return comment_limit;
+    }
+
     /** Returns the field value, or null if empty field. */
-    private String getField(HttpServletRequest request, String param) {
+    private String getField(HttpServletRequest request, String field) {
         // Get input from form
-        String fieldString = request.getParameter(param);
+        String fieldString = request.getParameter(field);
 
         if (fieldString.length() == 0) return null;
         return fieldString;
     }
+
+    /** 
+    * Returns list of comments parsed from datastore entities 
+    * num_comments: max number of comments to return. if -1, no max limit.
+    */
+    private List<Comment> getComments(int num_comments) {
+        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+
+        List<Comment> comments = new ArrayList<>();
+        for (Entity entity : results.asIterable()) {
+            if (comments.size() == num_comments) break;
+
+            long id = entity.getKey().getId();
+            String name = (String) entity.getProperty("user_name");
+            String location = (String) entity.getProperty("user_location");
+            String content = (String) entity.getProperty("content");
+            long timestamp = (long) entity.getProperty("timestamp");
+
+            Comment comment = new Comment(id, name, location, content, timestamp);
+            comments.add(comment);
+        }
+
+        return comments;
+    }
+
+
 }

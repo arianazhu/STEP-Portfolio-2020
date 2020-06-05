@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Comment {
 
+    private final long id;
+
     private String user_name;
 
     // plan to implement a country dropdown
@@ -20,11 +22,16 @@ public class Comment {
         content: the comment.
         timestamp: System time user posted the comment
     */
-    public Comment(String name, String location, String content, long timestamp) {
+    public Comment(long id, String name, String location, String content, long timestamp) {
+        this.id = id;
         this.user_name = name;
         this.user_location = location;
         this.content = content;
         this.timestamp = timestamp;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getUserName() {

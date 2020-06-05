@@ -36,13 +36,11 @@ function addRandomQuote() {
 }
 
 /**
- * Fetches data and handles response by converting to text for the homepage
+ * Fetches empty comments list and deletes comments
  */
-function getDataHomepage() {
-  fetch('/data').then(response => response.text()).then(messages => {
-    document.getElementById('quote-container').innerText = messages;
-    console.log(messages);
-  });
+function deleteComments() {
+    fetch('/delete-comments', {method: 'POST', body: null}).then(response => getComments());
+
 }
 
 /**

@@ -37,8 +37,9 @@
                 <select name="comment-limit" id="comment-limit" onchange="getComments()">
                     <option value="5">5</option>
                     <option value="10">10</option>
-                    <option value="all" selected="selected">All</option>
+                    <option value="-1" selected="selected">All</option>
                 </select>
+                <br>
                 <br>
             </div>
 
@@ -52,6 +53,8 @@
             <br>
             <input type="submit">
         </form>
+        <br>
+        <button type="button" onclick="deleteComments()">Delete all comments</button>
         <div id="comments-container">
             <ul id="comments-list"></ul>
         </div>

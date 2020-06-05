@@ -29,20 +29,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
+/** Servlet that returns comment data */
+@WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String limit_string = request.getParameter("comment-limit");
-        System.out.println("entering doGet. limit_string is " + limit_string);
         int comment_limit = 0;
         try {
-            System.out.println("entering try.");
             comment_limit = Integer.parseInt(limit_string);
         } catch (NumberFormatException n) {
-            System.out.println("entering catch.");
             if (limit_string.equals("all")) {
                 comment_limit = -1;
             }
@@ -51,7 +48,6 @@ public class DataServlet extends HttpServlet {
                 System.out.println("Unexpected value '" + comment_limit + "' for comment limit.");
             }
         }
-        System.out.println("finished try catch.");
         List<Comment> comments = getComments(comment_limit);
 
         response.setContentType("application/json");

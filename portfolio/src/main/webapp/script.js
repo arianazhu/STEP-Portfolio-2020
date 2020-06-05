@@ -48,14 +48,11 @@ function getDataHomepage() {
 /**
  * Fetches data and handles response for contact page comments
  */
-function getDataComments() {
-  fetch('/data?comment-limit=' + getValue("comment-limit")).then(response => response.json()).then(comments => {
-      console.log('limit is ' + getValue("comment-limit"));
-      // Build list of comments
+function getComments() {
+    // is the fetch string hardcoded?
+  fetch('/comments?comment-limit=' + getValue("comment-limit")).then(response => response.json()).then(comments => {
       const commentsElement = document.getElementById('comments-list');
-      comments.forEach(comment => {
-          commentsElement.appendChild(createListElement(comment));
-      });
+      updateComments(comments, commentsElement);
   });
 }
 
@@ -64,6 +61,19 @@ function getDataComments() {
  */
 function getValue(name) {
     return document.getElementById(name).value;
+}
+
+/**
+ * Replace old comments with new comments
+ */
+function updateComments(comments, element) {
+    // Clear out old comments
+    element.innerHTML = '';
+
+    // Build list of comments
+    comments.forEach(comment => {
+        element.appendChild(createListElement(comment));
+    });
 }
 
 /** Creates an <li> element containing text. */

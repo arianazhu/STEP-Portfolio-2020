@@ -10,7 +10,7 @@
 
     <script src="script.js"></script>
   </head>
-  <body onload="getDataComments()">
+  <body onload="getComments()">
     <div class="content">
       <h1>Ariana Zhu</h1>
       <ul class="menu">
@@ -33,11 +33,13 @@
         <h2>Sign the Guestbook!</h2>
         <form action="/data" method="POST">
             <div id="toggle-comments">
-                <select name="comment-limit" id="comment-limit">
+                <label for=:"comment-limit">View</label>
+                <select name="comment-limit" id="comment-limit" onchange="getComments()">
                     <option value="5">5</option>
-                    <option value="20">20</option>
-                    <option value="all">All</option>
+                    <option value="10">10</option>
+                    <option value="all" selected="selected">All</option>
                 </select>
+                <br>
             </div>
 
             <label for=:"comment-name">Name:</label><br>

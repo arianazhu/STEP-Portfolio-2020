@@ -49,13 +49,21 @@ function getDataHomepage() {
  * Fetches data and handles response for contact page comments
  */
 function getDataComments() {
-  fetch('/data').then(response => response.json()).then(comments => {
+  fetch('/data?comment-limit=' + getValue("comment-limit")).then(response => response.json()).then(comments => {
+      console.log('limit is ' + getValue("comment-limit"));
       // Build list of comments
       const commentsElement = document.getElementById('comments-list');
       comments.forEach(comment => {
           commentsElement.appendChild(createListElement(comment));
       });
   });
+}
+
+/**
+ * Get attribute name value
+ */
+function getValue(name) {
+    return document.getElementById(name).value;
 }
 
 /** Creates an <li> element containing text. */

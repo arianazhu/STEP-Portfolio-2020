@@ -35,22 +35,24 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        PreparedQuery results = datastore.prepare(query);
-
-        List<Comment> comments = new ArrayList<>();
-        for (Entity entity : results.asIterable()) {
-            long id = entity.getKey().getId();
-            String name = (String) entity.getProperty("user_name");
-            String location = (String) entity.getProperty("user_location");
-            String content = (String) entity.getProperty("content");
-            long timestamp = (long) entity.getProperty("timestamp");
-
-            Comment comment = new Comment(name, location, content, timestamp);
-            comments.add(comment);
+        String limit_string = request.getParameter("comment-limit");
+        System.out.println("entering doGet. limit_string is " + limit_string);
+        int comment_limit = 0;
+        try {
+            System.out.println("entering try.");
+            comment_limit = Integer.parseInt(limit_string);
+        } catch (NumberFormatException n) {
+            System.out.println("entering catch.");
+            if (limit_string.equals("all")) {
+                comment_limit = -1;
+            }
+            else {
+                // Printing error messages?
+                System.out.println("Unexpected value '" + comment_limit + "' for comment limit.");
+            }
         }
+        System.out.println("finished try catch.");
+        List<Comment> comments = getComments(comment_limit);
 
         response.setContentType("application/json");
         String json = new Gson().toJson(comments);
@@ -94,4 +96,31 @@ public class DataServlet extends HttpServlet {
         if (fieldString.length() == 0) return null;
         return fieldString;
     }
+
+    /** 
+    * Returns list of comments parsed from datastore entities 
+    * num_comments: max number of comments to return. if -1, no max limit.
+    */
+    private List<Comment> getComments(int num_comments) {
+        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+
+        List<Comment> comments = new ArrayList<>();
+        for (Entity entity : results.asIterable()) {
+            if (comments.size() == num_comments) break;
+
+            String name = (String) entity.getProperty("user_name");
+            String location = (String) entity.getProperty("user_location");
+            String content = (String) entity.getProperty("content");
+            long timestamp = (long) entity.getProperty("timestamp");
+
+            Comment comment = new Comment(name, location, content, timestamp);
+            comments.add(comment);
+        }
+
+        return comments;
+    }
+
+
 }

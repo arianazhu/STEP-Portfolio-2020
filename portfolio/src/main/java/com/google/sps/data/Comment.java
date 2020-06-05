@@ -17,6 +17,7 @@ public class Comment {
     private long timestamp;
 
     /* Comment:
+        id: unique id from Datastore
         user_name: The full name of the user posting the comment.
         user_location: Location (Country) of the comment poster.
         content: the comment.

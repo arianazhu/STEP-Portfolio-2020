@@ -43,13 +43,12 @@ public class DeleteServlet extends HttpServlet {
     }
 
     private void deleteDatastoreComments(HttpServletRequest request) {
-        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        Query query = new Query("Comment");
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
 
         for (Entity entity : results.asIterable()) {
             System.out.println("Deleting entity");
-            // long id = Long.parseLong(request.getParameter("id"));
             long id = entity.getKey().getId();
             Key commentEntityKey = KeyFactory.createKey("Comment", id);
             datastore.delete(commentEntityKey);

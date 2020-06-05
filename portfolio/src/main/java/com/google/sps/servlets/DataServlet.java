@@ -75,7 +75,14 @@ public class DataServlet extends HttpServlet {
     /** Returns comment limit value from the request, or -1 if user selected 'all' */
     private int getCommentLimit(HttpServletRequest request) {
         String limit_string = request.getParameter("comment-limit");
-        int comment_limit = Integer.parseInt(limit_string);
+        int comment_limit = 0;
+
+        try {
+            comment_limit = Integer.parseInt(limit_string);
+        } catch (NumberFormatException n) {
+            System.err.println("Unexpected value '" + comment_limit + "' for comment limit.");
+        }
+
         return comment_limit;
     }
 

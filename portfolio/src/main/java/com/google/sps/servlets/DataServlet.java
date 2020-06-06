@@ -51,13 +51,6 @@ public class DataServlet extends HttpServlet {
         String content = getField(request, "comment-content");
         long timestamp = System.currentTimeMillis();
 
-        // TODO check which field this pops up
-        if (name == null || location == null || content == null) {
-            response.setContentType("text/html");
-            response.getWriter().println("Please fill in all fields.");
-            return;
-        }
-
         // Store comment in Datastore
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("user_name", name);

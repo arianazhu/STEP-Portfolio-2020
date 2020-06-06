@@ -30,34 +30,37 @@
 
     <br>
     <div class="content comments">
+        <br><hr><br>
         <h2>Sign the Guestbook!</h2>
         <form action="/comments" method="POST">
+            <label for=:"comment-name">Name:</label><br>
+            <input type="text" name="comment-name" placeholder="Your name" required><br>
+            <br>
+            <label for=:"comment-location">Location:</label><br>
+            <input type="text" name="comment-location" placeholder="Your country" required><br>
+            <br>
+            <textarea name="comment-content" placeholder="Leave a comment" required></textarea><br>
+            <!-- <input type="text" name="comment-content" placeholder="Leave a comment" class="comment-input" required><br> -->
+
+            <br>
+            <input class="block" type="submit">
+
+            <br><br><hr>
+
             <div id="toggle-comments">
+                <br><br>
                 <label for=:"comment-limit">View</label>
                 <select name="comment-limit" id="comment-limit" onchange="getComments()">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="-1" selected="selected">All</option>
                 </select>
-                <br>
-                <br>
             </div>
-
-            <label for=:"comment-name">Name:</label><br>
-            <input type="text" name="comment-name"><br>
-            <label for=:"comment-location">Location (country):</label><br>
-            <input type="text" name="comment-location"><br>
-            <label for=:"comment-content">Leave a comment:</label><br>
-            <input type="text" name="comment-content"><br>
-
-            <br>
-            <input type="submit">
         </form>
-        <br>
-        <button type="button" onclick="deleteComments()">Delete all comments</button>
         <div id="comments-container">
             <ul id="comments-list"></ul>
         </div>
+        <center><button type="button" class="block" onclick="deleteComments()">Delete all comments (please don't)</button></center>
     </div>
   </body>
 </html>

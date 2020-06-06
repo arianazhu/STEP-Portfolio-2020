@@ -76,8 +76,13 @@ function updateComments(comments, element) {
 
 /** Creates an <li> element containing text. */
 function createListElement(comment) {
+    console.log('formatted: ' + comment.formatted_time);
     const liElement = document.createElement('li');
-    liElement.innerHTML = comment.user_name + ", " + comment.user_location + ", " + comment.content;
+    liElement.innerHTML = comment.content + '<br><br><div class="comment-data">Posted by ' + 
+        comment.user_name + ' (' + comment.user_location + ') at ' + comment.formatted_time +
+        '</div>';
+    console.log('innerHTML: ' + liElement.innerHTML);
+    liElement.setAttribute("class", "comment");
     return liElement;
 }
 

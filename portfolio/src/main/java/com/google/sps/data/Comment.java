@@ -2,6 +2,8 @@ package com.google.sps.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Comment {
 
@@ -16,6 +18,8 @@ public class Comment {
 
     private long timestamp;
 
+    private String formatted_time;
+
     /* Comment:
         id: unique id from Datastore
         user_name: The full name of the user posting the comment.
@@ -29,6 +33,10 @@ public class Comment {
         this.user_location = location;
         this.content = content;
         this.timestamp = timestamp;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm");    
+        Date date = new Date(timestamp);
+        formatted_time = sdf.format(date);
     }
 
     public long getId() {
@@ -49,6 +57,10 @@ public class Comment {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public String getFormattedTime() {
+        return formatted_time;
     }
 
 }

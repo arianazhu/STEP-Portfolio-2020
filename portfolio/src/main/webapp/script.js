@@ -36,16 +36,80 @@ function addRandomQuote() {
 }
 
 /**
- * Fetches data and handles response by converting to text for the homepage
+ * Fetches empty comments list and deletes comments
  */
-function getDataHomepage() {
-  fetch('/data').then(response => response.text()).then((quote) => {
-    document.getElementById('quote-container').innerText = quote;
-  });
+function deleteComments() {
+    fetch('/delete-comments', {method: 'POST', body: null}).then(response => getComments());
 
-  fetch('/data').then(response => response.json()).then((messages) => {
-      console.log(messages);
+}
+
+/**
+ * Fetches data and handles response for contact page comments
+ */
+function getComments() {
+    // is the fetch string hardcoded?
+  fetch('/comments?comment-limit=' + getValue("comment-limit")).then(response => response.json()).then(comments => {
+      const commentsElement = document.getElementById('comments-list');
+      updateComments(comments, commentsElement);
   });
+}
+
+/**
+ * Get attribute name value
+ */
+function getValue(name) {
+    return document.getElementById(name).value;
+}
+
+/**
+ * Replace old comments with new comments
+ */
+function updateComments(comments, element) {
+    // Clear out old comments
+    element.innerHTML = '';
+
+    // Build list of comments
+    comments.forEach(comment => {
+        element.appendChild(createListElement(comment));
+    });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(comment) {
+    const liElement = document.createElement('li');
+    var rounded_score = comment.sentiment_score.toFixed(2);
+
+    liElement.innerHTML = comment.content + '<br><br><div class="comment-data">Posted by ' + 
+        comment.user_name + ' (' + comment.user_location + ') at ' + comment.formatted_time +
+        '<br>Sentiment score: ' + rounded_score + '</div>';
+
+    liElement.setAttribute("class", "comment");
+    setSentimentColor(liElement, comment.sentiment_score);
+    return liElement;
+}
+
+/** Set background color based on sentiment score */
+function setSentimentColor(liElement, score) {
+    console.log('score:' + score);
+    switch(true) {
+        case (score < -0.3):
+            // Negative - red
+            console.log('negative');
+            liElement.style.backgroundColor = "#e8dada";
+            break;
+        case (score < 0.3):
+            // Neutral - blue
+            console.log('neutral');
+            liElement.style.backgroundColor = "#dcdae8";
+            break;
+        case (score <= 1):
+            // Positive - green
+            console.log('positive');
+            liElement.style.backgroundColor = "#dae8da";
+            break;
+        default:
+            break;
+    }
 }
 
 

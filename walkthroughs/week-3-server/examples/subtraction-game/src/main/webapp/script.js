@@ -17,12 +17,15 @@
  */
 function getSubtractionGame() {
   fetch('/subtraction-game').then(response => response.json()).then((game) => {
+      console.log(typeof game);
     const totalEl = document.getElementById('total');
     if (game.gameOver) {
       // The current game is over, show the total for the next game.
       totalEl.innerText = 'Total: 21';
+      console.log('Total: ' + 21);
     } else {
       totalEl.innerText = 'Total: ' + game.currentTotal;
+      console.log('Total: ' + game.currentTotal);
     }
 
     // Build the list of history entries.

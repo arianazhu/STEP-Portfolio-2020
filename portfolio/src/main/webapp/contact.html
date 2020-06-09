@@ -10,7 +10,7 @@
 
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="getComments()">
     <div class="content">
       <h1>Ariana Zhu</h1>
       <ul class="menu">
@@ -26,6 +26,45 @@
       <!-- Add font awesome icons -->
       <a href="https://www.linkedin.com/in/arianazhu/" class="fa fa-linkedin"></a>
       <a href="https://github.com/arianazhu" class="fa fa-github"></a>
+    </div>
+
+    <div class="section-break">
+        <hr>
+    </div>
+
+    <div class="content comments">
+        <h2>Sign the Guestbook!</h2>
+        <form action="/comments" method="POST">
+            <div class="form-group">
+                <label for=:"comment-name">Name:</label>
+                <input type="text" name="comment-name" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+                <label for=:"comment-location">Location:</label>
+                <input type="text" name="comment-location" placeholder="Your country" required>
+            </div>
+            <div class="form-group">
+                <textarea name="comment-content" placeholder="Leave a comment" required></textarea>
+            </div>
+            <input class="block" type="submit">
+
+            <div class="section-break">
+                <hr>
+            </div>
+
+            <div id="toggle-comments">
+                <label for=:"comment-limit">View</label>
+                <select name="comment-limit" id="comment-limit" onchange="getComments()">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="-1" selected="selected">All</option>
+                </select>
+            </div>
+        </form>
+        <div id="comments-container">
+            <ul id="comments-list"></ul>
+        </div>
+        <center><button type="button" class="block" onclick="deleteComments()">Delete all comments (please don't)</button></center>
     </div>
   </body>
 </html>

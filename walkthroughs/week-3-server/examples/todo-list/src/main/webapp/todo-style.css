@@ -13,3 +13,7 @@
 .task span {
   flex-grow: 1;
 }
+
+ul {
+    color: black;
+}

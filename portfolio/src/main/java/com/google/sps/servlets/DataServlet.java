@@ -14,7 +14,17 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.Comment;
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import java.io.IOException;
 import java.util.*;
 import javax.servlet.annotation.WebServlet;
@@ -22,25 +32,111 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
+/** Servlet that returns comment data */
+@WebServlet("/comments")
 public class DataServlet extends HttpServlet {
-
-    private ArrayList<String> messages = new ArrayList<>(Arrays.asList("Message 1", "Message 2", "Message 3"));
-
-    /**
-     * Convert ArrayList as JSON using GSON library.
-    */
-    private String convertArrayListToJson(ArrayList<String> messages) {
-        Gson gson = new Gson();
-        String json = gson.toJson(messages);
-        return json;
-    }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;");
-        // response.getWriter().println("<h1>Hello Ariana!</h1>");
-        response.getWriter().println(convertArrayListToJson(messages));
+        int comment_limit = getCommentLimit(request);
+        List<Comment> comments = getComments(comment_limit);
+
+        response.setContentType("application/json");
+        String json = new Gson().toJson(comments);
+        System.out.println("JSON:\n" + json);
+        response.getWriter().println(json);
     }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Entity commentEntity = getCommentEntity(request);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(commentEntity);
+
+        // Redirect back to HTML page
+        response.sendRedirect("/contact.html");
+    }
+
+    /** Returns Comment entity to be stored in Datastore */
+    private Entity getCommentEntity(HttpServletRequest request) throws IOException {
+        // Get input from the form
+        String name = getField(request, "comment-name");
+        String location = getField(request, "comment-location");
+        String content = getField(request, "comment-content");
+        long timestamp = System.currentTimeMillis();
+
+        // Perform sentiment analysis
+        Document doc = Document.newBuilder().setContent(content).setType(Document.Type.PLAIN_TEXT).build();
+        LanguageServiceClient languageService = LanguageServiceClient.create();
+        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+        
+        // Should be float but for some reason I get an error casting from double to float
+        // (Datastore stores it as a Double)
+        double score = (double) sentiment.getScore();
+
+        languageService.close();
+
+        // Store comment in Datastore
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("user_name", name);
+        commentEntity.setProperty("timestamp", timestamp);
+        commentEntity.setProperty("user_location", location);
+        commentEntity.setProperty("content", content);
+        commentEntity.setProperty("sentiment_score", score);
+
+        return commentEntity;
+    }
+
+    /** Returns comment limit value from the request, or -1 if user selected 'all' */
+    private int getCommentLimit(HttpServletRequest request) {
+        String limit_string = request.getParameter("comment-limit");
+        int comment_limit = 0;
+
+        try {
+            comment_limit = Integer.parseInt(limit_string);
+        } catch (NumberFormatException n) {
+            System.err.println("Unexpected value '" + comment_limit + "' for comment limit.");
+        }
+
+        return comment_limit;
+    }
+
+    /** Returns the field value, or null if empty field. */
+    private String getField(HttpServletRequest request, String field) {
+        // Get input from form
+        String fieldString = request.getParameter(field);
+
+        if (fieldString.length() == 0) return null;
+        return fieldString;
+    }
+
+    /** 
+    * Returns list of comments parsed from datastore entities 
+    * num_comments: max number of comments to return. if -1, no max limit.
+    */
+    private List<Comment> getComments(int num_comments) {
+        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+
+        List<Comment> comments = new ArrayList<>();
+        for (Entity entity : results.asIterable()) {
+            if (comments.size() == num_comments) break;
+
+            long id = entity.getKey().getId();
+            String name = (String) entity.getProperty("user_name");
+            String location = (String) entity.getProperty("user_location");
+            String content = (String) entity.getProperty("content");
+            long timestamp = (long) entity.getProperty("timestamp");
+            System.out.println(entity.getProperty("sentiment_score") + "is type " + entity.getProperty("sentiment_score").getClass());
+            double score = (double) entity.getProperty("sentiment_score");
+
+            Comment comment = new Comment(id, name, location, content, timestamp, score);
+            comments.add(comment);
+        }
+
+        return comments;
+    }
+
+
 }

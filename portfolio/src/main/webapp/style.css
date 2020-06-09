@@ -437,17 +437,36 @@ li.comment {
 }
 
 .comment-data {
-    font-style: italic;
+    /* font-style: italic; */
+}
+
+.toggle-label {
+    font-style: bold;
+}
+
+.inline-label {
+    padding: 0 0 0 4em;
 }
 
 select {
-    width: 7%;
     padding: 5px 5px;
     margin: 0 0 0 10px;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+select#comment-limit {
+    width: 7%;
+}
+
+select#comment-filter {
+    width: 20%;
+}
+
+select#comment-sort {
+    width: 15%;
 }
 
 input[type=text] {

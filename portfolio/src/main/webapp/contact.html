@@ -53,11 +53,27 @@
             </div>
 
             <div id="toggle-comments">
-                <label for=:"comment-limit">View</label>
+                <label class="toggle-label" for=:"comment-limit">View</label>
                 <select name="comment-limit" id="comment-limit" onchange="getComments()">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="-1" selected="selected">All</option>
+                </select>
+            <!-- </div> -->
+            <!-- <div id="toggle-comments"> -->
+                <label class="toggle-label inline-label" for=:"comment-filter">Filter</label>
+                <select name="comment-filter" id="comment-filter" onchange="getComments()">
+                    <option value="true">No negative comments</option>
+                    <option value="false" selected="selected">All</option>
+                </select>
+            <!-- </div>
+            <div id="toggle-comments"> -->
+                <label class="toggle-label inline-label" for=:"comment-sort">Sort</label>
+                <select name="comment-sort" id="comment-sort" onchange="getComments()">
+                    <option value="newest" selected="selected">Newest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="positive">Most positive</option>
+                    <option value="negative">Most negative</option>
                 </select>
             </div>
         </form>

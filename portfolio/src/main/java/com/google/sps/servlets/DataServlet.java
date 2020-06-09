@@ -39,11 +39,12 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int comment_limit = getCommentLimit(request);
-        List<Comment> comments = getComments(comment_limit);
+        boolean filter_comments = getCommentFilterValue(request);
+        String sort_direction = getSortDirection(request);
+        List<Comment> comments = getComments(comment_limit, filter_comments, sort_direction);
 
         response.setContentType("application/json");
         String json = new Gson().toJson(comments);
-        System.out.println("JSON:\n" + json);
         response.getWriter().println(json);
     }
 
@@ -95,11 +96,22 @@ public class DataServlet extends HttpServlet {
         try {
             comment_limit = Integer.parseInt(limit_string);
         } catch (NumberFormatException n) {
-            System.err.println("Unexpected value '" + comment_limit + "' for comment limit.");
+            System.err.println("Unexpected value '" + limit_string + "' for comment limit.");
         }
 
         return comment_limit;
     }
+
+    /** Returns comment filter value from the request (true to filter out negative comments, false otherwise) */
+    private boolean getCommentFilterValue(HttpServletRequest request) {
+        String filter_string = request.getParameter("comment-filter");
+        return Boolean.parseBoolean(filter_string);
+    }
+
+    /** Returns comment sort direction */
+    private String getSortDirection(HttpServletRequest request) {
+        return request.getParameter("comment-sort");
+    }    
 
     /** Returns the field value, or null if empty field. */
     private String getField(HttpServletRequest request, String field) {
@@ -114,8 +126,9 @@ public class DataServlet extends HttpServlet {
     * Returns list of comments parsed from datastore entities 
     * num_comments: max number of comments to return. if -1, no max limit.
     */
-    private List<Comment> getComments(int num_comments) {
-        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    private List<Comment> getComments(int num_comments, boolean filter_comments, String sort_direction) {
+        Query query = sortQuery(sort_direction);
+
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
 
@@ -131,11 +144,32 @@ public class DataServlet extends HttpServlet {
             System.out.println(entity.getProperty("sentiment_score") + "is type " + entity.getProperty("sentiment_score").getClass());
             double score = (double) entity.getProperty("sentiment_score");
 
+            // Skip if comment is negative and user asked to filter comments
+            if (filter_comments && (score < 0)) {
+                continue;
+            }
+
             Comment comment = new Comment(id, name, location, content, timestamp, score);
             comments.add(comment);
         }
 
         return comments;
+    }
+
+    /** Returns query with specified sort_direction */
+    private Query sortQuery(String sort_direction) {
+        if (sort_direction.equals("positive")) {
+            return new Query("Comment").addSort("sentiment_score", SortDirection.DESCENDING);
+        }
+        else if (sort_direction.equals("negative")) {
+            return new Query("Comment").addSort("sentiment_score", SortDirection.ASCENDING);
+        }
+        else if (sort_direction.equals("oldest")) {
+            return new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
+        }
+        else {
+            return new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        }
     }
 
 

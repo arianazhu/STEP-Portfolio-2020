@@ -47,11 +47,13 @@ function deleteComments() {
  * Fetches data and handles response for contact page comments
  */
 function getComments() {
-    // is the fetch string hardcoded?
-  fetch('/comments?comment-limit=' + getValue("comment-limit")).then(response => response.json()).then(comments => {
-      const commentsElement = document.getElementById('comments-list');
-      updateComments(comments, commentsElement);
-  });
+    // is the fetch string hardcoded? better way to get query string?
+  fetch('/comments?comment-limit=' + getValue("comment-limit") + '&comment-filter=' + 
+    getValue("comment-filter") + '&comment-sort=' + getValue("comment-sort"))
+        .then(response => response.json()).then(comments => {
+            const commentsElement = document.getElementById('comments-list');
+            updateComments(comments, commentsElement);
+        });
 }
 
 /**
@@ -90,7 +92,6 @@ function createListElement(comment) {
 
 /** Set background color based on sentiment score */
 function setSentimentColor(liElement, score) {
-    console.log('score:' + score);
     switch(true) {
         case (score < -0.3):
             // Negative - red
@@ -99,8 +100,7 @@ function setSentimentColor(liElement, score) {
             break;
         case (score < 0.3):
             // Neutral - blue
-            // Set lightness to the range of 50% - 85%, as score will range from -0.3 to 0.3 => -15 to 15.
-            liElement.style.backgroundColor = "hsl(230, 85%, " + (65 + Math.round(score * 50)) + "%)";
+            liElement.style.backgroundColor = "hsl(230, 85%, 85%)";
             break;
         case (score <= 1):
             // Positive - green
@@ -110,7 +110,6 @@ function setSentimentColor(liElement, score) {
         default:
             break;
     }
-    console.log("======");
 }
 
 

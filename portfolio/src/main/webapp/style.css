@@ -2,8 +2,9 @@
 
 body {
     background-color: #262626;
-    margin-top: 150px;
-    margin-bottom: 200px;
+    margin: 100px auto 100px auto;
+    padding: 0 0 0 0;
+    width: 800px;
 }
 
 h1, h2, h3, p, ul, label {
@@ -11,10 +12,12 @@ h1, h2, h3, p, ul, label {
 }
 
 .content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 800px; /* 650px */
-  height: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-break {
+    padding: 2em 0 2em 0;
 }
 
 #quote-container {
@@ -398,6 +401,13 @@ a.image_link:hover {
 
 
 /* Comments */
+.form-group {
+    padding: 0 0 2em 0;
+}
+
+#toggle-comments {
+    padding: 2em 0 0 0;
+}
 
 #comments-container {
   margin-top: 20px;
@@ -448,6 +458,7 @@ input[type=text] {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: #f2f2f2;
 }
 
 textarea {
@@ -460,10 +471,11 @@ textarea {
     border-radius: 4px;
     box-sizing: border-box;
     resize: none;
+    background-color: #f2f2f2;
 }
 
 input[type=text]:focus {
-    border: 3px solid #555;
+    border: 4px solid #dcdae8;
 }
 
 input[type=submit] {

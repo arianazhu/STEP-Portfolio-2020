@@ -22,6 +22,9 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import java.io.IOException;
 import java.util.*;
 import javax.servlet.annotation.WebServlet;
@@ -40,16 +43,38 @@ public class DataServlet extends HttpServlet {
 
         response.setContentType("application/json");
         String json = new Gson().toJson(comments);
+        System.out.println("JSON:\n" + json);
         response.getWriter().println(json);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Entity commentEntity = getCommentEntity(request);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(commentEntity);
+
+        // Redirect back to HTML page
+        response.sendRedirect("/contact.html");
+    }
+
+    /** Returns Comment entity to be stored in Datastore */
+    private Entity getCommentEntity(HttpServletRequest request) throws IOException {
         // Get input from the form
         String name = getField(request, "comment-name");
         String location = getField(request, "comment-location");
         String content = getField(request, "comment-content");
         long timestamp = System.currentTimeMillis();
+
+        // Perform sentiment analysis
+        Document doc = Document.newBuilder().setContent(content).setType(Document.Type.PLAIN_TEXT).build();
+        LanguageServiceClient languageService = LanguageServiceClient.create();
+        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+        
+        // Should be float but for some reason I get an error casting from double to float
+        // (Datastore stores it as a Double)
+        double score = (double) sentiment.getScore();
+
+        languageService.close();
 
         // Store comment in Datastore
         Entity commentEntity = new Entity("Comment");
@@ -57,12 +82,9 @@ public class DataServlet extends HttpServlet {
         commentEntity.setProperty("timestamp", timestamp);
         commentEntity.setProperty("user_location", location);
         commentEntity.setProperty("content", content);
+        commentEntity.setProperty("sentiment_score", score);
 
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(commentEntity);
-
-        // Redirect back to HTML page
-        response.sendRedirect("/contact.html");
+        return commentEntity;
     }
 
     /** Returns comment limit value from the request, or -1 if user selected 'all' */
@@ -106,8 +128,10 @@ public class DataServlet extends HttpServlet {
             String location = (String) entity.getProperty("user_location");
             String content = (String) entity.getProperty("content");
             long timestamp = (long) entity.getProperty("timestamp");
+            System.out.println(entity.getProperty("sentiment_score") + "is type " + entity.getProperty("sentiment_score").getClass());
+            double score = (double) entity.getProperty("sentiment_score");
 
-            Comment comment = new Comment(id, name, location, content, timestamp);
+            Comment comment = new Comment(id, name, location, content, timestamp, score);
             comments.add(comment);
         }
 

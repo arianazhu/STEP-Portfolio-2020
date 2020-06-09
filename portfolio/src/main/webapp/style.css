@@ -430,7 +430,7 @@ li.comment {
     font-style: none;
     margin: 10px 0 20px 0;
     padding: 20px 20px 20px 20px;
-    background-color: #dcdae8;
+    /* background-color: #dcdae8; */
     border-radius: 12px;
     max-width: 800px;
     word-break: break-all;

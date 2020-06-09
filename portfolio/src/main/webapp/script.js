@@ -76,14 +76,40 @@ function updateComments(comments, element) {
 
 /** Creates an <li> element containing text. */
 function createListElement(comment) {
-    console.log('formatted: ' + comment.formatted_time);
     const liElement = document.createElement('li');
+    var rounded_score = comment.sentiment_score.toFixed(2);
+
     liElement.innerHTML = comment.content + '<br><br><div class="comment-data">Posted by ' + 
         comment.user_name + ' (' + comment.user_location + ') at ' + comment.formatted_time +
-        '</div>';
-    console.log('innerHTML: ' + liElement.innerHTML);
+        '<br>Sentiment score: ' + rounded_score + '</div>';
+
     liElement.setAttribute("class", "comment");
+    setSentimentColor(liElement, comment.sentiment_score);
     return liElement;
+}
+
+/** Set background color based on sentiment score */
+function setSentimentColor(liElement, score) {
+    console.log('score:' + score);
+    switch(true) {
+        case (score < -0.3):
+            // Negative - red
+            console.log('negative');
+            liElement.style.backgroundColor = "#e8dada";
+            break;
+        case (score < 0.3):
+            // Neutral - blue
+            console.log('neutral');
+            liElement.style.backgroundColor = "#dcdae8";
+            break;
+        case (score <= 1):
+            // Positive - green
+            console.log('positive');
+            liElement.style.backgroundColor = "#dae8da";
+            break;
+        default:
+            break;
+    }
 }
 
 

@@ -94,22 +94,23 @@ function setSentimentColor(liElement, score) {
     switch(true) {
         case (score < -0.3):
             // Negative - red
-            console.log('negative');
-            liElement.style.backgroundColor = "#e8dada";
+            // Set lightness to the range of 50% - 85%, as score will range from -1 to -0.3 => -50 to -15.
+            liElement.style.backgroundColor = "hsl(0, 85%, " + (100 + Math.round(score * 50)) + "%)";
             break;
         case (score < 0.3):
             // Neutral - blue
-            console.log('neutral');
-            liElement.style.backgroundColor = "#dcdae8";
+            // Set lightness to the range of 50% - 85%, as score will range from -0.3 to 0.3 => -15 to 15.
+            liElement.style.backgroundColor = "hsl(230, 85%, " + (65 + Math.round(score * 50)) + "%)";
             break;
         case (score <= 1):
             // Positive - green
-            console.log('positive');
-            liElement.style.backgroundColor = "#dae8da";
+            // Set lightness to the range of 50% - 85%, as score will range from 0.3 to 1 => 50 to 15.
+            liElement.style.backgroundColor = "hsl(120, 85%, " + (100 - Math.round(score * 50)) + "%)";
             break;
         default:
             break;
     }
+    console.log("======");
 }
 
 

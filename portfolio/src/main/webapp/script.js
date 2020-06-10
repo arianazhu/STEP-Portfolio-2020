@@ -92,7 +92,7 @@ function createListElement(comment) {
 
     const deleteButtonElement = document.createElement('button');
     deleteButtonElement.classList.add("delete-comment");
-    deleteButtonElement.innerHTML = "<i class='fa fa-remove'></i>";
+    deleteButtonElement.innerHTML = "X";
     deleteButtonElement.addEventListener('click', () => {
         deleteComment(comment);
 

@@ -127,7 +127,7 @@ public class DataServlet extends HttpServlet {
     * num_comments: max number of comments to return. if -1, no max limit.
     */
     private List<Comment> getComments(int num_comments, boolean filter_comments, String sort_direction) {
-        Query query = sortQuery(sort_direction);
+        Query query = getSortedCommentsQuery(sort_direction);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
@@ -157,7 +157,7 @@ public class DataServlet extends HttpServlet {
     }
 
     /** Returns query with specified sort_direction */
-    private Query sortQuery(String sort_direction) {
+    private Query getSortedCommentsQuery(String sort_direction) {
         if (sort_direction.equals("positive")) {
             return new Query("Comment").addSort("sentiment_score", SortDirection.DESCENDING);
         }
@@ -167,8 +167,12 @@ public class DataServlet extends HttpServlet {
         else if (sort_direction.equals("oldest")) {
             return new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
         }
-        else {
+        else if (sort_direction.equals("newest")) {
             return new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+        }
+        else {
+            System.out.println("Unexpected sort direction '" + sort_direction + "' given. Displaying unsorted comments.");
+            return new Query("Comment");
         }
     }
 

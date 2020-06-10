@@ -36,11 +36,18 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
+    enum SortCriterion {
+        NEWEST_FIRST,
+        OLDEST_FIRST,
+        NEGATIVE_FIRST,
+        POSITIVE_FIRST
+    }
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int comment_limit = getCommentLimit(request);
         boolean filter_comments = getCommentFilterValue(request);
-        String sort_direction = getSortDirection(request);
+        SortCriterion sort_direction = getSortDirection(request);
         List<Comment> comments = getComments(comment_limit, filter_comments, sort_direction);
 
         response.setContentType("application/json");
@@ -109,9 +116,25 @@ public class DataServlet extends HttpServlet {
     }
 
     /** Returns comment sort direction */
-    private String getSortDirection(HttpServletRequest request) {
-        return request.getParameter("comment-sort");
-    }    
+    private SortCriterion getSortDirection(HttpServletRequest request) {
+        String sort_direction = request.getParameter("comment-sort");
+        if (sort_direction.equals("positive")) {
+            return SortCriterion.POSITIVE_FIRST;
+        }
+        else if (sort_direction.equals("negative")) {
+            return SortCriterion.NEGATIVE_FIRST;
+        }
+        else if (sort_direction.equals("oldest")) {
+            return SortCriterion.OLDEST_FIRST;
+        }
+        else if (sort_direction.equals("newest")) {
+            return SortCriterion.NEWEST_FIRST;
+        }
+        else {
+            System.out.println("Unexpected sort direction '" + sort_direction + "' given. Displaying unsorted comments.");
+            return null;
+        }
+    }
 
     /** Returns the field value, or null if empty field. */
     private String getField(HttpServletRequest request, String field) {
@@ -126,7 +149,7 @@ public class DataServlet extends HttpServlet {
     * Returns list of comments parsed from datastore entities 
     * num_comments: max number of comments to return. if -1, no max limit.
     */
-    private List<Comment> getComments(int num_comments, boolean filter_comments, String sort_direction) {
+    private List<Comment> getComments(int num_comments, boolean filter_comments, SortCriterion sort_direction) {
         Query query = getSortedCommentsQuery(sort_direction);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -157,24 +180,27 @@ public class DataServlet extends HttpServlet {
     }
 
     /** Returns query with specified sort_direction */
-    private Query getSortedCommentsQuery(String sort_direction) {
-        if (sort_direction.equals("positive")) {
-            return new Query("Comment").addSort("sentiment_score", SortDirection.DESCENDING);
+    private Query getSortedCommentsQuery(SortCriterion sort_direction) {
+        Query query;
+        switch (sort_direction) {
+            case POSITIVE_FIRST:
+                query = new Query("Comment").addSort("sentiment_score", SortDirection.DESCENDING);
+                break;
+            case NEGATIVE_FIRST:
+                query = new Query("Comment").addSort("sentiment_score", SortDirection.ASCENDING);
+                break;
+            case OLDEST_FIRST:
+                query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
+                break;
+            case NEWEST_FIRST:
+                query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+                break;
+            default:
+                query = new Query("Comment");
+                break;
         }
-        else if (sort_direction.equals("negative")) {
-            return new Query("Comment").addSort("sentiment_score", SortDirection.ASCENDING);
-        }
-        else if (sort_direction.equals("oldest")) {
-            return new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
-        }
-        else if (sort_direction.equals("newest")) {
-            return new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-        }
-        else {
-            System.out.println("Unexpected sort direction '" + sort_direction + "' given. Displaying unsorted comments.");
-            return new Query("Comment");
-        }
-    }
 
+        return query;
+    }
 
 }

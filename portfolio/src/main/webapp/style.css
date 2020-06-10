@@ -429,16 +429,15 @@ li.comment {
     color: black;
     font-style: none;
     margin: 10px 0 20px 0;
-    padding: 20px 20px 20px 20px;
-    /* background-color: #dcdae8; */
+    padding: 20px;
     border-radius: 12px;
-    max-width: 800px;
+    width: 800px;
     word-break: break-all;
 }
 
-.comment-data {
-    /* font-style: italic; */
-}
+/* .comment {
+  flex-grow: 1;
+} */
 
 .toggle-label {
     font-style: bold;
@@ -507,4 +506,20 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
+}
+
+button.delete-comment {
+    width: 20px;
+    height: 20px;
+    border: none;
+    cursor: pointer;
+    background-color: Transparent;
+    outline: none;
+    /* float: right; */
+    text-align: center;
+}
+
+.delete-comment:hover {
+    background-color: white;
+    opacity: 0.5;
 }

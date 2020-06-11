@@ -11,8 +11,8 @@ public class Comment {
 
     private String user_name;
 
-    // plan to implement a country dropdown
-    private String user_location;
+    // // plan to implement a country dropdown
+    // private String user_location;
 
     private String content;
 
@@ -30,10 +30,9 @@ public class Comment {
         timestamp: System time user posted the comment
         score: Score of comment sentiment (value between -1 and 1, based on how positive)
     */
-    public Comment(long id, String name, String location, String content, long timestamp, double sentiment_score) {
+    public Comment(long id, String name, String content, long timestamp, double sentiment_score) {
         this.id = id;
         this.user_name = name;
-        this.user_location = location;
         this.content = content;
         this.timestamp = timestamp;
         this.sentiment_score = sentiment_score;
@@ -49,10 +48,6 @@ public class Comment {
 
     public String getUserName() {
         return user_name;
-    }
-
-    public String getUserLocation() {
-        return user_location;
     }
 
     public String getContent() {

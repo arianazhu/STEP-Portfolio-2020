@@ -69,7 +69,7 @@ public class DataServlet extends HttpServlet {
     private Entity getCommentEntity(HttpServletRequest request) throws IOException {
         // Get input from the form
         String name = getField(request, "comment-name");
-        String location = getField(request, "comment-location");
+        // String location = getField(request, "comment-location");
         String content = getField(request, "comment-content");
         long timestamp = System.currentTimeMillis();
 
@@ -88,7 +88,7 @@ public class DataServlet extends HttpServlet {
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("user_name", name);
         commentEntity.setProperty("timestamp", timestamp);
-        commentEntity.setProperty("user_location", location);
+        // commentEntity.setProperty("user_location", location);
         commentEntity.setProperty("content", content);
         commentEntity.setProperty("sentiment_score", score);
 
@@ -152,7 +152,7 @@ public class DataServlet extends HttpServlet {
 
             long id = entity.getKey().getId();
             String name = (String) entity.getProperty("user_name");
-            String location = (String) entity.getProperty("user_location");
+            // String location = (String) entity.getProperty("user_location");
             String content = (String) entity.getProperty("content");
             long timestamp = (long) entity.getProperty("timestamp");
             System.out.println(entity.getProperty("sentiment_score") + "is type " + entity.getProperty("sentiment_score").getClass());
@@ -163,7 +163,7 @@ public class DataServlet extends HttpServlet {
                 continue;
             }
 
-            Comment comment = new Comment(id, name, location, content, timestamp, score);
+            Comment comment = new Comment(id, name, content, timestamp, score);
             comments.add(comment);
         }
 

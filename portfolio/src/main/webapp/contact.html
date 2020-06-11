@@ -53,18 +53,33 @@
             </div>
 
             <div id="toggle-comments">
-                <label for=:"comment-limit">View</label>
+                <label class="toggle-label" for=:"comment-limit">View</label>
                 <select name="comment-limit" id="comment-limit" onchange="getComments()">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="-1" selected="selected">All</option>
+                </select>
+            <!-- </div> -->
+            <!-- <div id="toggle-comments"> -->
+                <label class="toggle-label inline-label" for=:"comment-filter">Filter</label>
+                <select name="comment-filter" id="comment-filter" onchange="getComments()">
+                    <option value="true">No negative comments</option>
+                    <option value="false" selected="selected">All</option>
+                </select>
+            <!-- </div>
+            <div id="toggle-comments"> -->
+                <label class="toggle-label inline-label" for=:"comment-sort">Sort</label>
+                <select name="comment-sort" id="comment-sort" onchange="getComments()">
+                    <option value="NEWEST_FIRST" selected="selected">Newest</option>
+                    <option value="OLDEST_FIRST">Oldest</option>
+                    <option value="POSITIVE_FIRST">Most positive</option>
+                    <option value="NEGATIVE_FIRST">Most negative</option>
                 </select>
             </div>
         </form>
         <div id="comments-container">
             <ul id="comments-list"></ul>
         </div>
-        <center><button type="button" class="block" onclick="deleteComments()">Delete all comments (please don't)</button></center>
     </div>
   </body>
 </html>

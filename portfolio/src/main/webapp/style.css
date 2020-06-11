@@ -429,25 +429,43 @@ li.comment {
     color: black;
     font-style: none;
     margin: 10px 0 20px 0;
-    padding: 20px 20px 20px 20px;
-    /* background-color: #dcdae8; */
+    padding: 30px 30px;
     border-radius: 12px;
-    max-width: 800px;
+    width: 800px;
     word-break: break-all;
 }
 
-.comment-data {
-    font-style: italic;
+/* .comment {
+  flex-grow: 1;
+} */
+
+.toggle-label {
+    font-style: bold;
+}
+
+.inline-label {
+    padding: 0 0 0 4em;
 }
 
 select {
-    width: 7%;
     padding: 5px 5px;
     margin: 0 0 0 10px;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+select#comment-limit {
+    width: 7%;
+}
+
+select#comment-filter {
+    width: 20%;
+}
+
+select#comment-sort {
+    width: 15%;
 }
 
 input[type=text] {
@@ -488,4 +506,24 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
+}
+
+button.delete-comment {
+    width: auto;
+    margin: 0 0 20px 0;
+    padding: 2px 5px;
+    border: 2px solid black;
+    border-radius: 9px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: Transparent;
+    outline: none;
+    float: right;
+    text-align: center;
+    font-style: bold;
+}
+
+.delete-comment:hover {
+    background-color: white;
+    opacity: 0.3;
 }

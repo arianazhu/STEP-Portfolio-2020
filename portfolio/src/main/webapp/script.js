@@ -36,22 +36,25 @@ function addRandomQuote() {
 }
 
 /**
- * Fetches empty comments list and deletes comments
+ * Tells server to delete comment
  */
-function deleteComments() {
-    fetch('/delete-comments', {method: 'POST', body: null}).then(response => getComments());
-
+function deleteComment(comment) {
+    const fields = new URLSearchParams();
+    fields.append('id', comment.id);
+    fetch('/delete-comment', {method: 'POST', body: fields}).then(response => getComments());
 }
 
 /**
  * Fetches data and handles response for contact page comments
  */
 function getComments() {
-    // is the fetch string hardcoded?
-  fetch('/comments?comment-limit=' + getValue("comment-limit")).then(response => response.json()).then(comments => {
-      const commentsElement = document.getElementById('comments-list');
-      updateComments(comments, commentsElement);
-  });
+    // is the fetch string hardcoded? better way to get query string?
+  fetch('/comments?comment-limit=' + getValue("comment-limit") + '&comment-filter=' + 
+    getValue("comment-filter") + '&comment-sort=' + getValue("comment-sort"))
+        .then(response => response.json()).then(comments => {
+            const commentsElement = document.getElementById('comments-list');
+            updateComments(comments, commentsElement);
+        });
 }
 
 /**
@@ -77,35 +80,47 @@ function updateComments(comments, element) {
 /** Creates an <li> element containing text. */
 function createListElement(comment) {
     const liElement = document.createElement('li');
+    liElement.setAttribute("class", "comment");
     var rounded_score = comment.sentiment_score.toFixed(2);
 
-    liElement.innerHTML = comment.content + '<br><br><div class="comment-data">Posted by ' + 
+    // const titleElement = document.createElement('span');
+    liElement.innerHTML = comment.content + '<br><br>Posted by ' + 
         comment.user_name + ' (' + comment.user_location + ') at ' + comment.formatted_time +
-        '<br>Sentiment score: ' + rounded_score + '</div>';
+        '<br>Sentiment score: ' + rounded_score;
 
-    liElement.setAttribute("class", "comment");
     setSentimentColor(liElement, comment.sentiment_score);
+
+    const deleteButtonElement = document.createElement('button');
+    deleteButtonElement.classList.add("delete-comment");
+    deleteButtonElement.innerHTML = "X";
+    deleteButtonElement.addEventListener('click', () => {
+        deleteComment(comment);
+
+        // Remove the task from the DOM.
+        liElement.remove();
+    });
+
+    // liElement.appendChild(titleElement);
+    liElement.appendChild(deleteButtonElement);
     return liElement;
 }
 
 /** Set background color based on sentiment score */
 function setSentimentColor(liElement, score) {
-    console.log('score:' + score);
     switch(true) {
-        case (score < -0.3):
+        case (score < -0.35):
             // Negative - red
-            console.log('negative');
-            liElement.style.backgroundColor = "#e8dada";
+            // Set lightness to the range of 50% - 85%, as score will range from -1 to -0.3 => -50 to -15.
+            liElement.style.backgroundColor = "hsl(0, 85%, " + (100 + Math.round(score * 50)) + "%)";
             break;
-        case (score < 0.3):
+        case (score < 0.35):
             // Neutral - blue
-            console.log('neutral');
-            liElement.style.backgroundColor = "#dcdae8";
+            liElement.style.backgroundColor = "hsl(230, 85%, 85%)";
             break;
         case (score <= 1):
             // Positive - green
-            console.log('positive');
-            liElement.style.backgroundColor = "#dae8da";
+            // Set lightness to the range of 50% - 85%, as score will range from 0.3 to 1 => 50 to 15.
+            liElement.style.backgroundColor = "hsl(120, 85%, " + (100 - Math.round(score * 50)) + "%)";
             break;
         default:
             break;

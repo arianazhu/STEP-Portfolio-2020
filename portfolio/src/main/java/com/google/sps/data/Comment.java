@@ -30,13 +30,13 @@ public class Comment {
         timestamp: System time user posted the comment
         score: Score of comment sentiment (value between -1 and 1, based on how positive)
     */
-    public Comment(long id, String name, String location, String content, long timestamp, double score) {
+    public Comment(long id, String name, String location, String content, long timestamp, double sentiment_score) {
         this.id = id;
         this.user_name = name;
         this.user_location = location;
         this.content = content;
         this.timestamp = timestamp;
-        this.sentiment_score = score;
+        this.sentiment_score = sentiment_score;
 
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm");    
         Date date = new Date(timestamp);

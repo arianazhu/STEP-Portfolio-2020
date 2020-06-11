@@ -118,19 +118,10 @@ public class DataServlet extends HttpServlet {
     /** Returns comment sort direction */
     private SortCriterion getSortDirection(HttpServletRequest request) {
         String sort_direction = request.getParameter("comment-sort");
-        if (sort_direction.equals("positive")) {
-            return SortCriterion.POSITIVE_FIRST;
+        try {
+            return SortCriterion.valueOf(sort_direction);
         }
-        else if (sort_direction.equals("negative")) {
-            return SortCriterion.NEGATIVE_FIRST;
-        }
-        else if (sort_direction.equals("oldest")) {
-            return SortCriterion.OLDEST_FIRST;
-        }
-        else if (sort_direction.equals("newest")) {
-            return SortCriterion.NEWEST_FIRST;
-        }
-        else {
+        catch (IllegalArgumentException i) {
             System.out.println("Unexpected sort direction '" + sort_direction + "' given. Displaying unsorted comments.");
             return null;
         }

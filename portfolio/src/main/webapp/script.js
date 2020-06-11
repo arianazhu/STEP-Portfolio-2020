@@ -108,12 +108,12 @@ function createListElement(comment) {
 /** Set background color based on sentiment score */
 function setSentimentColor(liElement, score) {
     switch(true) {
-        case (score < -0.3):
+        case (score < -0.35):
             // Negative - red
             // Set lightness to the range of 50% - 85%, as score will range from -1 to -0.3 => -50 to -15.
             liElement.style.backgroundColor = "hsl(0, 85%, " + (100 + Math.round(score * 50)) + "%)";
             break;
-        case (score < 0.3):
+        case (score < 0.35):
             // Neutral - blue
             liElement.style.backgroundColor = "hsl(230, 85%, 85%)";
             break;

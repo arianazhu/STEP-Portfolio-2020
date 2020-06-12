@@ -76,55 +76,21 @@ li a:hover {
     animation: typing 4s steps(30, end);
 }
 
+#home-header {
+    padding: 1em 0 0 0;
+}
+
 /* The typing effect */
 @keyframes typing {
   from { width: 0 }
   to { width: 100% }
 }
 
-/* Fade in image effect inspired by https://blog.hubspot.com/website/css-fade-in */
-.fade-in {
-    animation: fadeIn ease 20s;
-    -webkit-animation: fadeIn ease 2s;
-    -moz-animation: fadeIn ease 2s;
-    -o-animation: fadeIn ease 2s;
-    -ms-animation: fadeIn ease 2s;
-}
-
-/* Fade in text effect */
-div h3.fade_text {
-    /* display: inline-block; */
-    /* font-family: 'Montserrat';
-    font-size: 30px;
-    color: black; */
-    text-transform: none;
-    margin: 0 20px;
-    opacity: 0.0;
-    animation: fadeIn ease 4s;
-    -webkit-animation: fadeIn ease 4s;
-}
-
-@keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-}
-
-/* Cross browser support */
-@-moz-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-}
-@-webkit-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-}
-@-o-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-}
-@-ms-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
+#map {
+    /* border: thin solid black; */
+    height: 500px;
+    width: 800px;
+    margin: 30px 0;
 }
 
 img {

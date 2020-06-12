@@ -39,10 +39,10 @@
                 <label for=:"comment-name">Name:</label>
                 <input type="text" name="comment-name" placeholder="Your name" required>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for=:"comment-location">Location:</label>
                 <input type="text" name="comment-location" placeholder="Your country" required>
-            </div>
+            </div> -->
             <div class="form-group">
                 <textarea name="comment-content" placeholder="Leave a comment" required></textarea>
             </div>
@@ -59,15 +59,13 @@
                     <option value="10">10</option>
                     <option value="-1" selected="selected">All</option>
                 </select>
-            <!-- </div> -->
-            <!-- <div id="toggle-comments"> -->
+
                 <label class="toggle-label inline-label" for=:"comment-filter">Filter</label>
                 <select name="comment-filter" id="comment-filter" onchange="getComments()">
                     <option value="true">No negative comments</option>
                     <option value="false" selected="selected">All</option>
                 </select>
-            <!-- </div>
-            <div id="toggle-comments"> -->
+
                 <label class="toggle-label inline-label" for=:"comment-sort">Sort</label>
                 <select name="comment-sort" id="comment-sort" onchange="getComments()">
                     <option value="NEWEST_FIRST" selected="selected">Newest</option>

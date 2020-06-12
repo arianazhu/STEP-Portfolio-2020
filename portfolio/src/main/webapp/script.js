@@ -42,7 +42,7 @@ function addRandomQuote() {
 
 /** Creates a map and adds it to the page. */
 function createMap() {
-    var centerUSALatLng = {lat: 39.540997, lng: -98.852047};
+    const centerUSALatLng = {lat: 39.540997, lng: -98.852047};
     map = new google.maps.Map(
         document.getElementById('map'),
         {

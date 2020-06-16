@@ -180,8 +180,8 @@ function createListElement(comment) {
     var rounded_score = comment.sentiment_score.toFixed(2);
 
     // const titleElement = document.createElement('span');
-    liElement.innerHTML = comment.content + '<br><br>Posted by ' + 
-        comment.user_name + ' at ' + comment.formatted_time +
+    liElement.innerHTML = comment.content + '<br><br>Posted by <strong>' + 
+        comment.user_name + '</strong> at ' + comment.formatted_time +
         '<br>Sentiment score: ' + rounded_score;
 
     setSentimentColor(liElement, comment.sentiment_score);

@@ -14,10 +14,30 @@
 
 package com.google.sps;
 
+import java.util.Arrays;
+import java.util.ArrayList; 
 import java.util.Collection;
 
 public final class FindMeetingQuery {
-  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
-  }
+    public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+        Collection<String> meeting_attendees = request.getAttendees();
+        if (meeting_attendees.size() <= 0) {
+            return Arrays.asList(TimeRange.WHOLE_DAY);
+        }
+        else if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
+            return Arrays.asList();
+        }
+        else {
+            Collection<TimeRange> busy_times = new ArrayList<TimeRange>();
+            for (Event event : events) {
+                Collection<String> overlap_attendees = event.getAttendees().retainAll(meeting_attendees);
+                if (overlap_attendees.size() > 0) {
+                    busy_times.add(event.getWhen());
+                }
+            }
+
+            
+        }
+        throw new UnsupportedOperationException("TODO: Implement this method.");
+    }
 }

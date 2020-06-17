@@ -14,10 +14,97 @@
 
 package com.google.sps;
 
+import java.util.Arrays;
+import java.util.ArrayList; 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List; 
+
 
 public final class FindMeetingQuery {
-  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
-  }
+    /**
+     * Returns a query containing all TimeRanges that are at least as long enough to
+     * accomodate the meeting request, and do not overlap with the events.
+     * events: all known events
+     * request: new meeting request
+     */
+    public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+        Collection<String> meeting_attendees = request.getAttendees();
+        if (meeting_attendees.size() <= 0) {
+            return Arrays.asList(TimeRange.WHOLE_DAY);
+        }
+        else if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
+            return Arrays.asList();
+        }
+        else {
+            List<TimeRange> busy_times = getBusyTimes(events, meeting_attendees);
+
+            // sort busy_times by start time, at each time range split from before and after
+            Collections.sort(busy_times, TimeRange.ORDER_BY_START);
+            
+            List<TimeRange> all_available_times = getAllAvailableTimes(busy_times);
+            return getUsableTimes(all_available_times, request.getDuration());
+        }
+        // throw new UnsupportedOperationException("TODO: Implement this method.");
+    }
+
+    /** Returns list of TimeRanges when at least one meeting attendee is busy */
+    private List<TimeRange> getBusyTimes(Collection<Event> events, Collection<String> meeting_attendees) {
+        List<TimeRange> busy_times = new ArrayList<TimeRange>();
+        for (Event event : events) {
+            Collection<String> overlap_attendees = new ArrayList<>(event.getAttendees());
+            overlap_attendees.retainAll(meeting_attendees);
+            if (overlap_attendees.size() > 0) {
+                busy_times.add(event.getWhen());
+            }
+        }
+        return busy_times;
+    }
+
+    /**
+     * Returns all available (non-busy) time slots in a day
+     * busy_times: sorted by start time
+     */
+    private List<TimeRange> getAllAvailableTimes(List<TimeRange> busy_times) {
+        List<TimeRange> available_times = new ArrayList<TimeRange>();
+        if (busy_times.size() <= 0) {
+            available_times.add(TimeRange.WHOLE_DAY);
+            return available_times;
+        }
+
+        int free_start = TimeRange.START_OF_DAY;
+        int busy_start;
+        for (TimeRange busy_slot : busy_times) {
+            busy_start = busy_slot.start();
+            // Case 1: busy_start comes before free_start
+            if (busy_start < free_start) {
+                free_start = Math.max(free_start, busy_slot.end());
+                continue;
+            }
+            // Case 2: busy_start is right at free_start ?? figure out points
+            if (busy_start == free_start) {
+
+            }
+            // Case 3: end comes after start, and no busy events will overlap
+            available_times.add(TimeRange.fromStartEnd(free_start, busy_start, false));
+            free_start = busy_slot.end();
+        }
+
+        available_times.add(TimeRange.fromStartEnd(free_start, TimeRange.END_OF_DAY, true));
+        return available_times;
+    }
+
+    /**
+     * Returns TimeRanges long enough for the specified meeting duration
+     */
+    private List<TimeRange> getUsableTimes(List<TimeRange> all_available_times, long duration) {
+        List<TimeRange> usable_times = new ArrayList<TimeRange>();
+        for (TimeRange time : all_available_times) {
+            if (time.duration() >= duration) {
+                usable_times.add(time);
+            }
+        }
+
+        return usable_times;
+    }
 }

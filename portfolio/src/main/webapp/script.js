@@ -42,7 +42,7 @@ function addRandomQuote() {
 
 /** Creates a map and adds it to the page. */
 function createMap() {
-    var centerUSALatLng = {lat: 39.540997, lng: -98.852047};
+    const centerUSALatLng = {lat: 39.540997, lng: -98.852047};
     map = new google.maps.Map(
         document.getElementById('map'),
         {
@@ -180,8 +180,8 @@ function createListElement(comment) {
     var rounded_score = comment.sentiment_score.toFixed(2);
 
     // const titleElement = document.createElement('span');
-    liElement.innerHTML = comment.content + '<br><br>Posted by ' + 
-        comment.user_name + ' at ' + comment.formatted_time +
+    liElement.innerHTML = comment.content + '<br><br>Posted by <strong>' + 
+        comment.user_name + '</strong> at ' + comment.formatted_time +
         '<br>Sentiment score: ' + rounded_score;
 
     setSentimentColor(liElement, comment.sentiment_score);

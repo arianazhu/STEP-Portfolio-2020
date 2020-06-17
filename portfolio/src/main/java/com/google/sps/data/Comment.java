@@ -6,20 +6,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Comment {
-
     private final long id;
-
     private String user_name;
-
-    // // plan to implement a country dropdown
-    // private String user_location;
-
     private String content;
-
     private long timestamp;
-
     private String formatted_time;
-
     private double sentiment_score;
 
     /* Comment:

@@ -22,6 +22,12 @@ import java.util.List;
 
 
 public final class FindMeetingQuery {
+    /**
+     * Returns a query containing all TimeRanges that are at least as long enough to
+     * accomodate the meeting request, and do not overlap with the events.
+     * events: all known events
+     * request: new meeting request
+     */
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
         Collection<String> meeting_attendees = request.getAttendees();
         if (meeting_attendees.size() <= 0) {
@@ -46,7 +52,7 @@ public final class FindMeetingQuery {
     private List<TimeRange> getBusyTimes(Collection<Event> events, Collection<String> meeting_attendees) {
         List<TimeRange> busy_times = new ArrayList<TimeRange>();
         for (Event event : events) {
-            Collection<String> overlap_attendees = event.getAttendees();
+            Collection<String> overlap_attendees = new ArrayList<>(event.getAttendees());
             overlap_attendees.retainAll(meeting_attendees);
             if (overlap_attendees.size() > 0) {
                 busy_times.add(event.getWhen());
@@ -66,25 +72,25 @@ public final class FindMeetingQuery {
             return available_times;
         }
 
-        int start = TimeRange.START_OF_DAY;
-        int end;
+        int free_start = TimeRange.START_OF_DAY;
+        int busy_start;
         for (TimeRange busy_slot : busy_times) {
-            end = busy_slot.start();
-            // Case 1: end comes before start
-            if (end < start) {
-                start = Math.max(start, busy_slot.end());
+            busy_start = busy_slot.start();
+            // Case 1: busy_start comes before free_start
+            if (busy_start < free_start) {
+                free_start = Math.max(free_start, busy_slot.end());
                 continue;
             }
-            // Case 2: end is right at start ?? figure out points
-            if (end == start) {
+            // Case 2: busy_start is right at free_start ?? figure out points
+            if (busy_start == free_start) {
 
             }
             // Case 3: end comes after start, and no busy events will overlap
-            available_times.add(TimeRange.fromStartEnd(start, end, false));
-            start = busy_slot.end();
+            available_times.add(TimeRange.fromStartEnd(free_start, busy_start, false));
+            free_start = busy_slot.end();
         }
 
-        available_times.add(TimeRange.fromStartEnd(start, TimeRange.END_OF_DAY, true));
+        available_times.add(TimeRange.fromStartEnd(free_start, TimeRange.END_OF_DAY, true));
         return available_times;
     }
 

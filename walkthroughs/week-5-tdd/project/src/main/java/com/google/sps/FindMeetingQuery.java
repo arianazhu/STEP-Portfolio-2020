@@ -29,23 +29,38 @@ public final class FindMeetingQuery {
      * request: new meeting request
      */
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-        Collection<String> meeting_attendees = request.getAttendees();
-        if (meeting_attendees.size() <= 0) {
+        Collection<String> mandatory_attendees = request.getAttendees();
+        Collection<String> optional_attendees = request.getOptionalAttendees();
+        if ((mandatory_attendees.size() <= 0) && (optional_attendees.size() <= 0)) {
             return Arrays.asList(TimeRange.WHOLE_DAY);
         }
         else if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
             return Arrays.asList();
         }
         else {
-            List<TimeRange> busy_times = getBusyTimes(events, meeting_attendees);
+            List<TimeRange> mandatory_busy_times = getBusyTimes(events, mandatory_attendees);
+            List<TimeRange> all_busy_times = getBusyTimes(events, optional_attendees);
+            all_busy_times.addAll(mandatory_busy_times);
 
-            // sort busy_times by start time, at each time range split from before and after
-            Collections.sort(busy_times, TimeRange.ORDER_BY_START);
+            Collections.sort(mandatory_busy_times, TimeRange.ORDER_BY_START);
+            Collections.sort(all_busy_times, TimeRange.ORDER_BY_START);
             
-            List<TimeRange> all_available_times = getAllAvailableTimes(busy_times);
-            return getUsableTimes(all_available_times, request.getDuration());
+            List<TimeRange> mandatory_available_times = getAllAvailableTimes(mandatory_busy_times);
+            List<TimeRange> all_available_times = getAllAvailableTimes(all_busy_times);
+
+            List<TimeRange> mandatory_usable_times = getUsableTimes(mandatory_available_times, request.getDuration());
+            List<TimeRange> all_usable_times = getUsableTimes(all_available_times, request.getDuration());
+
+            if (all_usable_times.size() > 0) {
+                return all_usable_times;
+            }
+            else if ((optional_attendees.size() > 0) && (mandatory_attendees.size() <= 0)) {
+                return all_usable_times;
+            }
+            else {
+                return mandatory_usable_times;
+            }
         }
-        // throw new UnsupportedOperationException("TODO: Implement this method.");
     }
 
     /** Returns list of TimeRanges when at least one meeting attendee is busy */
@@ -81,11 +96,7 @@ public final class FindMeetingQuery {
                 free_start = Math.max(free_start, busy_slot.end());
                 continue;
             }
-            // Case 2: busy_start is right at free_start ?? figure out points
-            if (busy_start == free_start) {
-
-            }
-            // Case 3: end comes after start, and no busy events will overlap
+            // Case 2: end comes after start, and no busy events will overlap
             available_times.add(TimeRange.fromStartEnd(free_start, busy_start, false));
             free_start = busy_slot.end();
         }

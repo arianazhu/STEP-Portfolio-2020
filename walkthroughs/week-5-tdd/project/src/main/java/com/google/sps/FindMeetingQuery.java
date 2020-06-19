@@ -63,6 +63,10 @@ public final class FindMeetingQuery {
     /** Returns list of TimeRanges when at least one meeting attendee is busy */
     private List<TimeRange> getBusyTimes(Collection<Event> events, Collection<String> meeting_attendees) {
         List<TimeRange> busy_times = new ArrayList<TimeRange>();
+        if (meeting_attendees.size() <= 0) {
+            return busy_times;
+        }
+        
         for (Event event : events) {
             Collection<String> overlap_attendees = new ArrayList<>(event.getAttendees());
             overlap_attendees.retainAll(meeting_attendees);
